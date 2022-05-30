@@ -24,6 +24,11 @@ async function main() {
   await erc20Deployed.deployed();
 
   console.log("Token deployed to:", erc20Deployed.address);
+
+  const accounts = await hre.ethers.getSigners();
+
+  console.log("Giving 100 mil REAL to: ", accounts[0].address)
+  await erc20Deployed.transfer(accounts[0].address, "100000000");
 }
 
 // We recommend this pattern to be able to use async/await everywhere
