@@ -37,6 +37,7 @@ export async function initContract() {
       changeMethods: ["create_land", "delete_land", "unstake"],
     }
   );
+  // TODO: change ft.contract
   window.ftContract = await new Contract(
     window.walletConnection.account(),
     "ft.abdulhakim.testnet",

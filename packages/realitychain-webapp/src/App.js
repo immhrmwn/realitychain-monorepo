@@ -5,6 +5,9 @@ import { ConnectWallet } from "./components/ConnectWallet";
 import { HomePage } from "./components/HomePage";
 import { WorldComponent } from "./components/World";
 import { login, logout } from "./utils";
+import ParcelComponent from "./components/Parcel/Parcel";
+
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
   const [open, setOpen] = React.useState(false);
@@ -56,12 +59,26 @@ function App() {
 
   return (
     <div className="App">
-      <Header onConnect={handleOpenModal} onLogout={logout} balance={balance} />
-      <ConnectWallet open={open} onHide={handleCloseModal} onLogin={onLogin} />
-      {!window.walletConnection.isSignedIn() && <HomePage />}
-      {window.walletConnection.isSignedIn() && (
-        <WorldComponent balance={balance} />
-      )}
+      <Router>
+        <Header
+          onConnect={handleOpenModal}
+          onLogout={logout}
+          balance={balance}
+        />
+        <ConnectWallet
+          open={open}
+          onHide={handleCloseModal}
+          onLogin={onLogin}
+        />
+        <Routes>
+          <Route path="/minting" element={<ParcelComponent />} />
+          <Route
+            path="/staking"
+            element={<WorldComponent balance={balance} />}
+          />
+          <Route path="/" element={<HomePage />} />
+        </Routes>
+      </Router>
     </div>
   );
 }

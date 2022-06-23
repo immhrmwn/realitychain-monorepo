@@ -1,3 +1,4 @@
+// TODO: changed contract address
 const CONTRACT_NAME = process.env.CONTRACT_NAME || "stake.abdulhakim.testnet";
 
 function getConfig(env) {

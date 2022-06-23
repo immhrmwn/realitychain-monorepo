@@ -3,13 +3,17 @@ import {
   Button,
   ButtonGroup,
   Navbar,
+  Nav,
   Container,
   OverlayTrigger,
   Popover,
 } from "react-bootstrap";
 import Logo from "../assets/realitychain.webp";
 
+import { useNavigate } from "react-router-dom";
+
 export const Header = ({ onConnect, onLogout, balance }) => {
+  const navigate = useNavigate();
   const handleConnectWallet = () => {
     onConnect();
   };
@@ -20,28 +24,6 @@ export const Header = ({ onConnect, onLogout, balance }) => {
 
   const account = () => {
     return (
-      // <OverlayTrigger
-      //   trigger="click"
-      //   placement={"bottom"}
-      //   overlay={
-      //     <Popover id={`popover-positioned-bottom`}>
-      //       <Popover.Header
-      //         as="h3"
-      //         style={{ background: "black", color: "#FFF" }}
-      //       >
-      //         Account
-      //       </Popover.Header>
-      //       <Popover.Body>
-      //         <h5>$REAL: {balance}</h5>
-      //         <Button variant="dark" onClick={handleLogout} size="sm">
-      //           logout
-      //         </Button>
-      //       </Popover.Body>
-      //     </Popover>
-      //   }
-      // >
-      //   <Button variant="outline-dark">{window.accountId}</Button>
-      // </OverlayTrigger>
       <ButtonGroup>
         <Button variant="outline-dark" disabled>
           {balance} REAL
@@ -69,10 +51,21 @@ export const Header = ({ onConnect, onLogout, balance }) => {
     <Navbar bg="light" expand="lg">
       <Container>
         <Navbar.Brand>
-          <a href="https://www.realitychain.io/">
+          <a
+            href="https://www.realitychain.io/"
+            target={"_blank"}
+            rel="noreferrer"
+          >
             <img style={{ height: 40 }} src={Logo} alt={"reality-chain"} />
           </a>
         </Navbar.Brand>
+        <Nav className="me-auto">
+          <Nav.Link onClick={() => navigate("/")}>Home</Nav.Link>
+          <Nav.Link onClick={() => navigate("/staking")}>Staking</Nav.Link>
+          <Nav.Link onClick={() => navigate("/minting")}>
+            Parcel Minting
+          </Nav.Link>
+        </Nav>
         {window.walletConnection.isSignedIn() ? (
           account()
         ) : (

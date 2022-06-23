@@ -12,12 +12,14 @@ import "./World.css";
 import { ReactComponent as NearIcon } from "../assets/wallets/near.svg";
 import { ReactComponent as EthereumIcon } from "../assets/wallets/ethereum.svg";
 import { ReactComponent as PolygonIcon } from "../assets/wallets/polygon.svg";
+import { useNavigate } from "react-router-dom";
 
 export const WorldComponent = ({ balance }) => {
   const [blockchain, setBlockchain] = React.useState(null);
   const [world, setWorld] = React.useState(null);
   const [size, setSize] = React.useState(null);
   const [value, setValue] = React.useState();
+  const navigate = useNavigate();
 
   const selectBlockchain = (_blockchain) => {
     setBlockchain(_blockchain);
@@ -31,7 +33,8 @@ export const WorldComponent = ({ balance }) => {
     setSize(_size);
   };
 
-  const prize = () => {
+  // TODO: get data parcel price
+  const price = () => {
     switch (size) {
       case "small":
         return "100";
@@ -58,6 +61,7 @@ export const WorldComponent = ({ balance }) => {
   };
 
   const handleStake = () => {
+    // TODO: make sure the data payload is required
     const payload = {
       blockchain,
       world,
@@ -65,8 +69,15 @@ export const WorldComponent = ({ balance }) => {
       value,
       id: window.accountId,
     };
-    if (balance >= value) console.log(payload);
-    else console.log("your balance is not sufficient");
+    if (balance >= value) {
+      // TODO: POST DATA STAKING
+      console.log(payload);
+      // TODO: callback if needed e.g. success toaster or navigate
+      navigate("/minting");
+    } else {
+      // TODO: Error handling
+      console.log("your balance is not sufficient");
+    }
   };
 
   return (
@@ -202,7 +213,7 @@ export const WorldComponent = ({ balance }) => {
               </div>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <span>Balance Required:</span>
-                <span>$REAL {prize()}</span>
+                <span>$REAL {price()}</span>
               </div>
               <div
                 style={{
@@ -215,7 +226,7 @@ export const WorldComponent = ({ balance }) => {
                   <InputGroup.Text>$REAL</InputGroup.Text>
                   <Form.Control
                     type="number"
-                    placeholder={prize()}
+                    placeholder={price()}
                     value={value}
                     onChange={(e) => setValue(e.target.value)}
                   />
@@ -226,10 +237,12 @@ export const WorldComponent = ({ balance }) => {
               </div>
               <div style={{ marginBottom: 32 }} />
               <Button
-                variant={value !== prize() ? "outline-dark" : "primary"}
+                variant={value !== price() ? "outline-dark" : "primary"}
                 style={{ width: "100%" }}
                 onClick={handleStake}
-                disabled={value !== prize()}
+                disabled={
+                  value !== price() || !window.walletConnection.isSignedIn()
+                }
               >
                 STAKE
               </Button>
