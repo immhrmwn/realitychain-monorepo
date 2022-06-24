@@ -4,7 +4,7 @@ use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
 use near_sdk::serde::{Deserialize, Serialize};
 use near_sdk::json_types::U128;
 use near_sdk::collections::{UnorderedMap, UnorderedSet};
-use near_sdk::{AccountId, Balance, PanicOnDefault};
+use near_sdk::{AccountId, Balance, PanicOnDefault, BorshStorageKey};
 use std::collections::HashMap;
 
 pub type TokenSeriesId = String;
@@ -47,4 +47,18 @@ pub struct TransactionFee {
 #[derive(BorshDeserialize, BorshSerialize, PanicOnDefault)]
 pub struct MarketDataTransactionFee {
     pub transaction_fee: UnorderedMap<TokenSeriesId, u128>
+}
+
+#[derive(BorshSerialize, BorshStorageKey)]
+pub enum StorageKey {
+    NonFungibleToken,
+    Metadata,
+    TokenMetadata,
+    Enumeration,
+    Approval,
+    // CUSTOM
+    TokenSeriesById,
+    TokensBySeriesInner { token_series: String },
+    TokensPerOwner { account_hash: Vec<u8> },
+    MarketDataTransactionFee,
 }
