@@ -25,7 +25,7 @@ pub use metadata::StorageKey;
 
 use crate::metadata::{
     TokenSeries, TokenSeriesJson, TransactionFee, TokenSeriesId, TimestampSec, Payout,
-    MarketDataTransactionFee
+    MarketDataTransactionFee, ParcelMetadata
 };
 
 /// between token_series_id and edition number e.g. 42:2 where 42 is series and 2 is edition
@@ -217,23 +217,30 @@ mod tests {
     ) {
         contract.nft_create_series(
             None,
-            TokenMetadata {
-                title: Some("Tsundere land".to_string()),
-                description: None,
-                media: Some(
-                    "bafybeidzcan4nzcz7sczs4yzyxly4galgygnbjewipj6haco4kffoqpkiy".to_string()
-                ),
-                media_hash: None,
-                copies: copies,
-                issued_at: None,
-                expires_at: None,
-                starts_at: None,
-                updated_at: None,
-                extra: None,
-                reference: Some(
-                    "bafybeicg4ss7qh5odijfn2eogizuxkrdh3zlv4eftcmgnljwu7dm64uwji".to_string()
-                ),
-                reference_hash: None,
+            ParcelMetadata {
+                world_id: "world_id".to_string(),
+                land_id: "land_id".to_string(),
+                land_x: 0,
+                land_y: 0,
+                land_size: 0,
+                token_metadata: TokenMetadata {
+                    title: Some("Tsundere land".to_string()),
+                    description: None,
+                    media: Some(
+                        "bafybeidzcan4nzcz7sczs4yzyxly4galgygnbjewipj6haco4kffoqpkiy".to_string()
+                    ),
+                    media_hash: None,
+                    copies: copies,
+                    issued_at: None,
+                    expires_at: None,
+                    starts_at: None,
+                    updated_at: None,
+                    extra: None,
+                    reference: Some(
+                        "bafybeicg4ss7qh5odijfn2eogizuxkrdh3zlv4eftcmgnljwu7dm64uwji".to_string()
+                    ),
+                    reference_hash: None,
+                }
             },
             price,
             Some(royalty.clone()),
@@ -275,16 +282,16 @@ mod tests {
         );
 
         assert!(
-            nft_series_return.metadata.copies.is_none()
+            nft_series_return.metadata.token_metadata.copies.is_none()
         );
 
         assert_eq!(
-            nft_series_return.metadata.title.unwrap(),
+            nft_series_return.metadata.token_metadata.title.unwrap(),
             "Tsundere land".to_string()
         );
 
         assert_eq!(
-            nft_series_return.metadata.reference.unwrap(),
+            nft_series_return.metadata.token_metadata.reference.unwrap(),
             "bafybeicg4ss7qh5odijfn2eogizuxkrdh3zlv4eftcmgnljwu7dm64uwji".to_string()
         );
 

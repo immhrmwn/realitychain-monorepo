@@ -16,9 +16,19 @@ pub struct Payout {
     pub payout: HashMap<AccountId, U128>,
 }
 
+#[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize, Clone)]
+pub struct ParcelMetadata {
+    pub token_metadata: TokenMetadata,
+    pub world_id: String,
+    pub land_id: String,
+    pub land_x: u32,
+    pub land_y: u32,
+    pub land_size: u32,
+}
+
 #[derive(BorshDeserialize, BorshSerialize)]
 pub struct TokenSeries {
-	pub metadata: TokenMetadata,
+	pub metadata: ParcelMetadata,
 	pub creator_id: AccountId,
 	pub tokens: UnorderedSet<TokenId>,
     pub price: Option<Balance>,
@@ -30,7 +40,7 @@ pub struct TokenSeries {
 #[serde(crate = "near_sdk::serde")]
 pub struct TokenSeriesJson {
     pub token_series_id: TokenSeriesId,
-	pub metadata: TokenMetadata,
+	pub metadata: ParcelMetadata,
 	pub creator_id: AccountId,
     pub royalty: HashMap<AccountId, u32>,
     pub transaction_fee: Option<U128>
@@ -53,7 +63,7 @@ pub struct MarketDataTransactionFee {
 pub enum StorageKey {
     NonFungibleToken,
     Metadata,
-    TokenMetadata,
+    ParcelMetadata,
     Enumeration,
     Approval,
     // CUSTOM

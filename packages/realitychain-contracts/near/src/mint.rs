@@ -143,7 +143,7 @@ impl RealityParcelsContract {
         );
 
         let num_tokens = token_series.tokens.len();
-        let max_copies = token_series.metadata.copies.unwrap_or(u64::MAX);
+        let max_copies = token_series.metadata.token_metadata.copies.unwrap_or(u64::MAX);
         assert!(num_tokens < max_copies, "Series supply maxed");
 
         if (num_tokens + 1) >= max_copies {
@@ -213,7 +213,7 @@ impl RealityParcelsContract {
         );
 
         assert_eq!(
-            token_series.metadata.copies,
+            token_series.metadata.token_metadata.copies,
             None,
             "Paras: decrease supply if copies not null"
         );

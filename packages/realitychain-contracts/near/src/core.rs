@@ -1,4 +1,5 @@
 use crate::*;
+use crate::metadata::ParcelMetadata;
 
 use near_sdk::{
     assert_one_yocto, env, near_bindgen, serde_json::json, AccountId, Balance, BorshStorageKey,
@@ -38,7 +39,7 @@ impl RealityParcelsContract {
             tokens: NonFungibleToken::new(
                 StorageKey::NonFungibleToken,
                 owner_id,
-                Some(StorageKey::TokenMetadata),
+                Some(StorageKey::ParcelMetadata),
                 Some(StorageKey::Enumeration),
                 Some(StorageKey::Approval),
             ),
@@ -156,7 +157,7 @@ impl RealityParcelsContract {
     pub fn nft_create_series(
         &mut self,
         creator_id: Option<ValidAccountId>,
-        token_metadata: TokenMetadata,
+        token_metadata: ParcelMetadata,
         price: Option<U128>,
         royalty: Option<HashMap<AccountId, u32>>,
     ) -> TokenSeriesJson {
@@ -174,7 +175,7 @@ impl RealityParcelsContract {
             "Paras: duplicate token_series_id"
         );
 
-        let title = token_metadata.title.clone();
+        let title = token_metadata.token_metadata.title.clone();
         assert!(title.is_some(), "Paras: token_metadata.title is required");
         
 
@@ -273,7 +274,7 @@ impl RealityParcelsContract {
         );
 
         let minted_copies = token_series.tokens.len();
-        let copies = token_series.metadata.copies.unwrap();
+        let copies = token_series.metadata.token_metadata.copies.unwrap();
 
         assert!(
             (copies - decrease_copies.0) >= minted_copies,
@@ -287,7 +288,7 @@ impl RealityParcelsContract {
             false
         };
 
-        token_series.metadata.copies = Some(copies - decrease_copies.0);
+        token_series.metadata.token_metadata.copies = Some(copies - decrease_copies.0);
 
         self.token_series_by_id.insert(&token_series_id, &token_series);
         env::log(
@@ -295,14 +296,14 @@ impl RealityParcelsContract {
                 "type": "nft_decrease_series_copies",
                 "params": {
                     "token_series_id": token_series_id,
-                    "copies": U64::from(token_series.metadata.copies.unwrap()),
+                    "copies": U64::from(token_series.metadata.token_metadata.copies.unwrap()),
                     "is_non_mintable": is_non_mintable,
                 }
             })
             .to_string()
             .as_bytes(),
         );
-        U64::from(token_series.metadata.copies.unwrap())
+        U64::from(token_series.metadata.token_metadata.copies.unwrap())
     }
 
     #[payable]
@@ -487,15 +488,15 @@ impl RealityParcelsContract {
 
         token_metadata.title = Some(format!(
             "{}{}{}",
-            series_metadata.title.unwrap(),
+            series_metadata.token_metadata.title.unwrap(),
             TITLE_DELIMETER,
             token_id_iter.next().unwrap()
         ));
 
-        token_metadata.reference = series_metadata.reference;
-        token_metadata.media = series_metadata.media;
-        token_metadata.copies = series_metadata.copies;
-        token_metadata.extra = series_metadata.extra;
+        token_metadata.reference = series_metadata.token_metadata.reference;
+        token_metadata.media = series_metadata.token_metadata.media;
+        token_metadata.copies = series_metadata.token_metadata.copies;
+        token_metadata.extra = series_metadata.token_metadata.extra;
 
         Some(Token {
             token_id,
