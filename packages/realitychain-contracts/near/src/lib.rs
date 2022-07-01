@@ -361,7 +361,7 @@ mod tests {
     }
 
     #[test]
-    #[should_panic(expected = "Paras: Token series is not mintable")]
+    #[should_panic(expected = "RealityChain: Token series is not mintable")]
     fn test_invalid_mint_non_mintable() {
         let (mut context, mut contract) = setup_contract();
         testing_env!(context
@@ -392,7 +392,7 @@ mod tests {
     }
 
     #[test]
-    #[should_panic(expected = "Paras: Token series is not mintable")]
+    #[should_panic(expected = "RealityChain: Token series is not mintable")]
     fn test_invalid_mint_above_copies() {
         let (mut context, mut contract) = setup_contract();
         testing_env!(context
@@ -449,7 +449,7 @@ mod tests {
     }
 
     #[test]
-    #[should_panic(expected = "Paras: cannot decrease supply, already minted : 2")]
+    #[should_panic(expected = "RealityChain: cannot decrease supply, already minted : 2")]
     fn test_invalid_decrease_copies() {
         let (mut context, mut contract) = setup_contract();
         testing_env!(context
@@ -482,7 +482,7 @@ mod tests {
     }
 
     #[test]
-    #[should_panic( expected = "Paras: not for sale" )]
+    #[should_panic( expected = "RealityChain: not for sale" )]
     fn test_invalid_buy_price_null() {
         let (mut context, mut contract) = setup_contract();
         testing_env!(context
@@ -520,7 +520,7 @@ mod tests {
     }
 
     #[test]
-    #[should_panic( expected = "Paras: price higher than 1000000000000000000000000000000000" )]
+    #[should_panic( expected = "RealityChain: price higher than 1000000000000000000000000000000000" )]
     fn test_invalid_price_shouldnt_be_higher_than_max_price() {
         let (mut context, mut contract) = setup_contract();
         testing_env!(context

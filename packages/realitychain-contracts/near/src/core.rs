@@ -63,7 +63,7 @@ impl RealityParcelsContract {
         assert_eq!(
             env::predecessor_account_id(),
             prev.tokens.owner_id,
-            "Paras: Only owner"
+            "RealityChain: Only owner"
         );
 
         RealityParcelsContract {
@@ -84,12 +84,12 @@ impl RealityParcelsContract {
         assert_eq!(
             env::predecessor_account_id(),
             self.tokens.owner_id,
-            "Paras: Owner only"
+            "RealityChain: Owner only"
         );
 
         assert!(
             next_fee < 10_000,
-            "Paras: transaction fee is more than 10_000"
+            "RealityChain: transaction fee is more than 10_000"
         );
 
         if let Some(start_time) = start_time {
@@ -146,7 +146,7 @@ impl RealityParcelsContract {
         assert_eq!(
             env::predecessor_account_id(),
             self.tokens.owner_id,
-            "Paras: Owner only"
+            "RealityChain: Owner only"
         );
         self.treasury_id = treasury_id.to_string();
     }
@@ -165,18 +165,18 @@ impl RealityParcelsContract {
         let caller_id = env::predecessor_account_id();
 
         if creator_id.is_some() {
-            assert_eq!(creator_id.unwrap().to_string(), caller_id, "Paras: Caller is not creator_id");
+            assert_eq!(creator_id.unwrap().to_string(), caller_id, "RealityChain: Caller is not creator_id");
         }
 
         let token_series_id = format!("{}", (self.token_series_by_id.len() + 1));
 
         assert!(
             self.token_series_by_id.get(&token_series_id).is_none(),
-            "Paras: duplicate token_series_id"
+            "RealityChain: duplicate token_series_id"
         );
 
         let title = token_metadata.token_metadata.title.clone();
-        assert!(title.is_some(), "Paras: token_metadata.title is required");
+        assert!(title.is_some(), "RealityChain: token_metadata.title is required");
         
 
         let mut total_perpetual = 0;
@@ -194,7 +194,7 @@ impl RealityParcelsContract {
             HashMap::new()
         };
 
-        assert!(total_accounts <= 10, "Paras: royalty exceeds 10 accounts");
+        assert!(total_accounts <= 10, "RealityChain: royalty exceeds 10 accounts");
 
         assert!(
             total_perpetual <= 9000,
@@ -204,7 +204,7 @@ impl RealityParcelsContract {
         let price_res: Option<u128> = if let Some(price) = price {
             assert!(
                 price.0 < MAX_PRICE,
-                "Paras: price higher than {}",
+                "RealityChain: price higher than {}",
                 MAX_PRICE
             );
             Some(price.0)
@@ -270,7 +270,7 @@ impl RealityParcelsContract {
         assert_eq!(
             env::predecessor_account_id(),
             token_series.creator_id,
-            "Paras: Creator only"
+            "RealityChain: Creator only"
         );
 
         let minted_copies = token_series.tokens.len();
@@ -278,7 +278,7 @@ impl RealityParcelsContract {
 
         assert!(
             (copies - decrease_copies.0) >= minted_copies,
-            "Paras: cannot decrease supply, already minted : {}", minted_copies
+            "RealityChain: cannot decrease supply, already minted : {}", minted_copies
         );
 
         let is_non_mintable = if (copies - decrease_copies.0) == minted_copies {
@@ -314,18 +314,18 @@ impl RealityParcelsContract {
         assert_eq!(
             env::predecessor_account_id(),
             token_series.creator_id,
-            "Paras: Creator only"
+            "RealityChain: Creator only"
         );
 
         assert!(
             token_series.is_mintable,
-            "Paras: token series is not mintable"
+            "RealityChain: token series is not mintable"
         );
 
         if let Some(price) = price {
             assert!(
                 price.0 < MAX_PRICE,
-                "Paras: price higher than {}",
+                "RealityChain: price higher than {}",
                 MAX_PRICE
             );
             token_series.price = Some(price.0);

@@ -25,8 +25,8 @@ impl RealityParcelsContract {
     ) -> TokenId {
         let initial_storage_usage = env::storage_usage();
 
-        let token_series = self.token_series_by_id.get(&token_series_id).expect("Paras: Token series not exist");
-        assert_eq!(env::predecessor_account_id(), token_series.creator_id, "Paras: not creator");
+        let token_series = self.token_series_by_id.get(&token_series_id).expect("RealityChain: Token series not exist");
+        assert_eq!(env::predecessor_account_id(), token_series.creator_id, "RealityChain: not creator");
         let token_id: TokenId = self._nft_mint_series(token_series_id, receiver_id.to_string());
 
         refund_deposit(env::storage_usage() - initial_storage_usage, 0);
@@ -49,8 +49,8 @@ impl RealityParcelsContract {
     ) -> Option<Promise> {
         let initial_storage_usage = env::storage_usage();
 
-        let token_series = self.token_series_by_id.get(&token_series_id).expect("Paras: Token series not exist");
-        assert_eq!(env::predecessor_account_id(), token_series.creator_id, "Paras: not creator");
+        let token_series = self.token_series_by_id.get(&token_series_id).expect("RealityChain: Token series not exist");
+        assert_eq!(env::predecessor_account_id(), token_series.creator_id, "RealityChain: not creator");
         let token_id: TokenId = self._nft_mint_series(token_series_id, token_series.creator_id.clone());
 
         // Need to copy the nft_approve code here to solve the gas problem
@@ -102,12 +102,12 @@ impl RealityParcelsContract {
     ) -> TokenId {
         let initial_storage_usage = env::storage_usage();
 
-        let token_series = self.token_series_by_id.get(&token_series_id).expect("Paras: Token series not exist");
-        let price: u128 = token_series.price.expect("Paras: not for sale");
+        let token_series = self.token_series_by_id.get(&token_series_id).expect("RealityChain: Token series not exist");
+        let price: u128 = token_series.price.expect("RealityChain: not for sale");
         let attached_deposit = env::attached_deposit();
         assert!(
             attached_deposit >= price,
-            "Paras: attached deposit is less than price : {}",
+            "RealityChain: attached deposit is less than price : {}",
             price
         );
         let token_id: TokenId = self._nft_mint_series(token_series_id.clone(), receiver_id.to_string());
@@ -136,10 +136,10 @@ impl RealityParcelsContract {
         token_series_id: TokenSeriesId, 
         receiver_id: AccountId
     ) -> TokenId {
-        let mut token_series = self.token_series_by_id.get(&token_series_id).expect("Paras: Token series not exist");
+        let mut token_series = self.token_series_by_id.get(&token_series_id).expect("RealityChain: Token series not exist");
         assert!(
             token_series.is_mintable,
-            "Paras: Token series is not mintable"
+            "RealityChain: Token series is not mintable"
         );
 
         let num_tokens = token_series.tokens.len();
@@ -204,18 +204,18 @@ impl RealityParcelsContract {
         assert_eq!(
             env::predecessor_account_id(),
             token_series.creator_id,
-            "Paras: Creator only"
+            "RealityChain: Creator only"
         );
 
         assert!(
             token_series.is_mintable,
-            "Paras: already non-mintable"
+            "RealityChain: already non-mintable"
         );
 
         assert_eq!(
             token_series.metadata.token_metadata.copies,
             None,
-            "Paras: decrease supply if copies not null"
+            "RealityChain: decrease supply if copies not null"
         );
 
         token_series.is_mintable = false;
