@@ -34,18 +34,20 @@ export async function initContract() {
         "get_land_metadata",
       ],
       // Change methods can modify the state. But you don't receive the returned value when called.
-      changeMethods: ["create_land", "delete_land", "unstake"],
-    }
-  );
-  // TODO: change ft.contract
-  window.ftContract = await new Contract(
-    window.walletConnection.account(),
-    "ft.abdulhakim.testnet",
-    {
-      // View methods are read only. They don't modify the state, but usually return some value.
-      viewMethods: ["ft_balance_of", "check_storage"],
-      // Change methods can modify the state. But you don't receive the returned value when called.
-      changeMethods: ["ft_transfer", "ft_transfer_call", "storage_deposit"],
+      changeMethods: [
+        "nft_mint",
+        "nft_mint_and_approve",
+        "nft_buy",
+        "nft_set_series_non_mintable",
+        "set_transaction_fee",
+        "nft_transfer",
+        "nft_transfer_call",
+        "nft_transfer_payout",
+        "nft_burn",
+        "nft_create_series",
+        "nft_decrease_series_copies",
+        "set_treasury"
+      ],
     }
   );
 }

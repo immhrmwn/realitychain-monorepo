@@ -1,5 +1,5 @@
 // TODO: changed contract address
-const CONTRACT_NAME = process.env.CONTRACT_NAME || "stake.abdulhakim.testnet";
+const CONTRACT_NAME = process.env.CONTRACT_NAME || "stake.agustinustheo.testnet";
 
 function getConfig(env) {
   switch (env) {
