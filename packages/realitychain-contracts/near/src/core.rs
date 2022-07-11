@@ -115,7 +115,6 @@ impl RealityParcelsContract {
         self.calculate_current_transaction_fee()
     }
 
-
     pub fn calculate_current_transaction_fee(&mut self) -> u128 {
         let transaction_fee: &TransactionFee = &self.transaction_fee;
         if transaction_fee.next_fee.is_some() && to_sec(env::block_timestamp()) >= transaction_fee.start_time.unwrap() {
