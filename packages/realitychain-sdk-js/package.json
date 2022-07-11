@@ -1,0 +1,39 @@
+{
+  "name": "@realitychain/sdk",
+  "version": "0.0.1-beta.0",
+  "description": "Reality Chain SDK for Frontend Applications.",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib/**/*"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/realitychainio/realitychain-monorepo.git"
+  },
+  "keywords": [
+    "web3",
+    "metaverse",
+    "sdk",
+    "js",
+    "typescript",
+    "near",
+    "near-sdk"
+  ],
+  "author": "Agustinus Theodorus <agustinustheoo@gmail.com>",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/realitychainio/realitychain-monorepo/issues"
+  },
+  "homepage": "https://github.com/realitychainio/realitychain-monorepo#readme",
+  "dependencies": {
+    "js-base64": "^3.7.2",
+    "near-api-js": "^0.45.1"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.3"
+  }
+}
