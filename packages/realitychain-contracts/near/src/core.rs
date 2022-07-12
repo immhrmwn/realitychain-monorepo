@@ -15,9 +15,9 @@ impl RealityParcelsContract {
             treasury_id,
             NFTContractMetadata {
                 spec: NFT_METADATA_SPEC.to_string(),
-                name: "Paras Collectibles".to_string(),
-                symbol: "PARAS".to_string(),
-                icon: Some(DATA_IMAGE_SVG_PARAS_ICON.to_string()),
+                name: "Reality Chain Collectibles".to_string(),
+                symbol: "REAL".to_string(),
+                icon: Some(DATA_IMAGE_SVG_REAL_ICON.to_string()),
                 base_uri: Some("https://ipfs.fleek.co/ipfs".to_string()),
                 reference: None,
                 reference_hash: None,
@@ -197,7 +197,7 @@ impl RealityParcelsContract {
 
         assert!(
             total_perpetual <= 9000,
-            "Paras Exceeds maximum royalty -> 9000",
+            "Reality Chain Exceeds maximum royalty -> 9000",
         );
 
         let price_res: Option<u128> = if let Some(price) = price {
