@@ -1,5 +1,5 @@
 {
-  "name": "realitychain-webapp",
+  "name": "@realitychain/webapp",
   "version": "1.0.0",
   "description": "Reality Chain frontend",
   "private": true,

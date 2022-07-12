@@ -1,5 +1,5 @@
 {
-  "name": "realitychain-sol",
+  "name": "@realitychain/erc20",
   "version": "1.0.0",
   "description": "Reality Chain token",
   "scripts": {
