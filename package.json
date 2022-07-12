@@ -3,11 +3,11 @@
   "private": true,
   "scripts": {
     "lerna": "lerna",
-    "build": "lerna run build --scope=@realitychain/{erc20,sdk,webapp}",
-    "test": "lerna run test --scope=@realitychain/{near-nft,erc20,sdk}",
-    "prepare": "lerna run prepare --scope=@realitychain/{erc20,sdk,webapp}",
-    "lint": "lerna run lint --scope=@realitychain/{near-nft,erc20,sdk}",
-    "format": "lerna run format --scope=@realitychain/{near-nft,erc20,sdk}"
+    "build": "lerna run --parallel build",
+    "test": "lerna run --parallel test --scope=@realitychain/{near-nft,erc20,sdk}",
+    "prepare": "lerna run --parallel prepare",
+    "lint": "lerna run --parallel lint --scope=@realitychain/{near-nft,erc20,sdk}",
+    "format": "lerna run --parallel format --scope=@realitychain/{near-nft,erc20,sdk}"
   },
   "resolutions": {
     "**/ethers": "^5.6.8",

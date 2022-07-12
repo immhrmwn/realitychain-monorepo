@@ -9,7 +9,7 @@ export async function nftCreateSeries(
 ): Promise<TokenSeriesJson> {
   return (await (contract as any).nft_create_series({
     args,
-    gas, //	attached GAS
+    gas,
     amount,
   })) as TokenSeriesJson;
 }
@@ -22,7 +22,7 @@ export async function nftMint(
 ): Promise<any> {
   return (await (contract as any).nft_mint({
     args,
-    gas, //	attached GAS
+    gas,
     amount,
   })) as any;
 }

@@ -3,7 +3,7 @@ import { Base64 } from 'js-base64';
 
 export async function generateAuthToken(accountId: string, signer: nearAPI.InMemorySigner, networkId: string) {
   const arr: any[] = new Array(accountId);
-  for (var i = 0; i < accountId.length; i++) {
+  for (let i = 0; i < accountId.length; i++) {
     arr[i] = accountId.charCodeAt(i);
   }
   const msgBuf = new Uint8Array(arr);

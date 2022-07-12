@@ -1,4 +1,4 @@
-export interface contractConfig {
+export interface ContractConfig {
   networkId: string;
   nodeUrl: string;
   walletUrl: string;
@@ -6,7 +6,7 @@ export interface contractConfig {
   contractName: string;
 }
 
-export const testnetConfig: contractConfig = {
+export const testnetConfig: ContractConfig = {
   networkId: 'testnet',
   nodeUrl: 'https://rpc.testnet.near.org',
   walletUrl: 'https://wallet.testnet.near.org',
@@ -14,7 +14,7 @@ export const testnetConfig: contractConfig = {
   contractName: `agustinustheo.testnet`,
 };
 
-export const mainnetConfig: contractConfig = {
+export const mainnetConfig: ContractConfig = {
   networkId: 'mainnet',
   nodeUrl: 'https://rpc.mainnet.near.org',
   walletUrl: 'https://wallet.mainnet.near.org',
