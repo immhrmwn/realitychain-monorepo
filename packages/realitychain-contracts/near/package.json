@@ -1,7 +1,7 @@
 {
-  "name": "@realitychain/erc20",
+  "name": "@realitychain/near-nft",
   "version": "1.0.0",
-  "description": "Reality Chain token",
+  "description": "Reality Chain NFT Smart Contract",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

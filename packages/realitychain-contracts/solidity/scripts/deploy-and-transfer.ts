@@ -14,11 +14,13 @@ async function main() {
   // manually to make sure everything is compiled
   // await hre.run('compile');
   const networkName = hre.network.name;
-  console.log('Deploying to network: ', networkName);
+  console.log("Deploying to network: ", networkName);
 
   // We get the contract to deploy
-  const erc20Contract = await hre.ethers.getContractFactory('RealityChainToken');
-  console.log('Deploying RealityChainToken...');
+  const erc20Contract = await hre.ethers.getContractFactory(
+    "RealityChainToken"
+  );
+  console.log("Deploying RealityChainToken...");
   const erc20Deployed = await erc20Contract.deploy();
 
   await erc20Deployed.deployed();
@@ -27,7 +29,7 @@ async function main() {
 
   const accounts = await hre.ethers.getSigners();
 
-  console.log("Giving 100 mil REAL to: ", accounts[0].address)
+  console.log("Giving 100 mil REAL to: ", accounts[0].address);
   await erc20Deployed.transfer(accounts[0].address, "100000000");
 }
 

@@ -32,7 +32,7 @@
     "near",
     "near-sdk"
   ],
-  "author": "Agustinus Theodorus <agustinustheoo@gmail.com>",
+  "author": "Theo <agustinustheoo@gmail.com>",
   "license": "AGPL-3.0",
   "bugs": {
     "url": "https://github.com/realitychainio/realitychain-monorepo/issues"
