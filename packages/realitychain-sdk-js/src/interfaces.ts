@@ -1,18 +1,16 @@
-type Nullable<T> = T | null;
-
 export interface TokenMetadata {
-  title: string;
-  media: string;
-  reference: string;
-  issued_at: string;
-  copies: Nullable<number>;
-  description: Nullable<string>;
-  media_hash: Nullable<string>;
-  expires_at: Nullable<string>;
-  starts_at: Nullable<string>;
-  updated_at: Nullable<string>;
-  extra: Nullable<string>;
-  reference_hash: Nullable<string>;
+  title: string | null;
+  media: string | null;
+  reference: string | null;
+  issued_at: string | null;
+  copies: number | null;
+  description: string | null;
+  media_hash: string | null;
+  expires_at: string | null;
+  starts_at: string | null;
+  updated_at: string | null;
+  extra: string | null;
+  reference_hash: string | null;
 }
 
 export interface Token {
