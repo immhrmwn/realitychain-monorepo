@@ -1,9 +1,9 @@
 import { keyStores } from 'near-api-js';
 import { testnetConfig } from '../src/constant';
 import { realityChainContractWithAccountId } from '../src/near-api';
-import { nftCreateSeries, nftMint } from '../src/change-methods';
+import { nftBuy, nftCreateSeries, nftMint } from '../src/change-methods';
 import { nftGetSeriesSingle, nftToken } from '../src/view-methods';
-import { accountId, createNftMintParams, nftCreateSeriesParams } from './mock/mock-parameters';
+import { accountId, createNftBuyParams, createNftMintParams, nftCreateSeriesParams, nftCreateSeriesWithPriceParams } from './mock/mock-parameters';
 
 describe('Contract Tests', () => {
   global.console = {
@@ -43,6 +43,24 @@ describe('Contract Tests', () => {
     expect(ret.metadata.media).toEqual(nftCreateSeriesParams.token_metadata.media);
     expect(ret.metadata.reference).toEqual(nftCreateSeriesParams.token_metadata.reference);
     expect(ret.royalty).toEqual(nftCreateSeriesParams.royalty);
+  }, 60000);
+
+  it('nft buy should return', async () => {
+    // Arrange
+    const keyStore = new keyStores.UnencryptedFileSystemKeyStore(`${process.env.HOME}/.near-credentials/`);
+    const contract: any = await realityChainContractWithAccountId(accountId, keyStore, testnetConfig);
+    const ncs = await nftCreateSeries(contract, nftCreateSeriesWithPriceParams);
+
+    // Act
+    const ret = await nftBuy(contract, createNftBuyParams(ncs.token_series_id));
+    const token = await nftToken(contract, ret);
+
+    // Assert
+    expect(ret).toEqual(`${ncs.token_series_id}:1`);
+    expect(token.token_id).toEqual(ret);
+    expect(token.metadata.title.includes(nftCreateSeriesWithPriceParams.token_metadata.title)).toBeTruthy();
+    expect(token.metadata.media).toEqual(nftCreateSeriesWithPriceParams.token_metadata.media);
+    expect(token.metadata.reference).toEqual(nftCreateSeriesWithPriceParams.token_metadata.reference);
   }, 60000);
 
   it('nft mint should return', async () => {

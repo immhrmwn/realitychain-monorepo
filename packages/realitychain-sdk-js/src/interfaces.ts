@@ -40,6 +40,11 @@ export interface TokenSeriesJson {
   transaction_fee: string;
 }
 
+export interface NftBuyDto {
+  token_series_id: string;
+  receiver_id: string;
+}
+
 export interface NftMintDto {
   token_series_id: string;
   receiver_id: string;
