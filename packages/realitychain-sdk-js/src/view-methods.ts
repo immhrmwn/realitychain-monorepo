@@ -6,3 +6,9 @@ export async function nftGetSeriesSingle(contract: nearAPI.Contract, tokenSeries
     token_series_id: tokenSeriesId,
   })) as TokenSeriesJson;
 }
+
+export async function nftToken(contract: nearAPI.Contract, tokenId: string): Promise<any> {
+  return await (contract as any).nft_token({
+    token_id: tokenId,
+  });
+}

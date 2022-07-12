@@ -27,7 +27,7 @@ export async function realityChainContractWithAccountId(
   const account = await useAccount(connection, accountId);
 
   return await new nearAPI.Contract(account, config.contractName, {
-    viewMethods: ['nft_get_series_single'],
-    changeMethods: ['nft_create_series'],
+    viewMethods: ['nft_get_series_single', 'nft_token'],
+    changeMethods: ['nft_create_series', 'nft_mint', 'nft_decrease_series_copies', 'nft_set_series_non_mintable'],
   });
 }

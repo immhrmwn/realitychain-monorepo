@@ -1,5 +1,5 @@
 import * as nearAPI from 'near-api-js';
-import { NftCreateSeriesDto, TokenSeriesJson } from './interfaces';
+import { NftCreateSeriesDto, NftMintDto, TokenSeriesJson } from './interfaces';
 
 export async function nftCreateSeries(
   contract: nearAPI.Contract,
@@ -12,4 +12,17 @@ export async function nftCreateSeries(
     gas, //	attached GAS
     amount,
   })) as TokenSeriesJson;
+}
+
+export async function nftMint(
+  contract: nearAPI.Contract,
+  args: NftMintDto,
+  gas: number = 300000000000000,
+  amount: string = '7090000000000000000000',
+): Promise<any> {
+  return (await (contract as any).nft_mint({
+    args,
+    gas, //	attached GAS
+    amount,
+  })) as any;
 }
