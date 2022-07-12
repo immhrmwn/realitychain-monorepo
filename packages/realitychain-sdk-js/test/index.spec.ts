@@ -6,6 +6,15 @@ import { nftGetSeriesSingle, nftToken } from '../src/view-methods';
 import { accountId, createNftMintParams, nftCreateSeriesParams } from './mock/mock-parameters';
 
 describe('Contract Tests', () => {
+  global.console = {
+    ...console,
+    log: jest.fn(),
+    debug: jest.fn(),
+    info: jest.fn(),
+    warn: jest.fn(),
+    error: jest.fn(),
+  };
+
   it('nft create series should return', async () => {
     // Arrange
     const keyStore = new keyStores.UnencryptedFileSystemKeyStore(`${process.env.HOME}/.near-credentials/`);
@@ -45,9 +54,12 @@ describe('Contract Tests', () => {
     // Act
     const ret = await nftMint(contract, createNftMintParams(ncs.token_series_id));
     const token = await nftToken(contract, ret);
-    console.log(token);
 
     // Assert
     expect(ret).toEqual(`${ncs.token_series_id}:1`);
+    expect(token.token_id).toEqual(ret);
+    expect(token.metadata.title.includes(nftCreateSeriesParams.token_metadata.title)).toBeTruthy();
+    expect(token.metadata.media).toEqual(nftCreateSeriesParams.token_metadata.media);
+    expect(token.metadata.reference).toEqual(nftCreateSeriesParams.token_metadata.reference);
   }, 60000);
 });

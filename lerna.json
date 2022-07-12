@@ -1,6 +1,7 @@
 {
   "packages": [
-    "packages/*"
+    "packages/*",
+    "packages/realitychain-contracts/*"
   ],
   "version": "1.0.0"
 }

@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "Reality Chain token",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "yarn hardhat compile",
+    "prepare": "yarn build",
+    "test": "yarn hardhat test",
+    "format": "prettier --write \"(src|example|test)/**/*.ts\"",
+    "lint": "tslint -p tsconfig.json"
   },
   "repository": {
     "type": "git",

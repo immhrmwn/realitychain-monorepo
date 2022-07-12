@@ -9,7 +9,6 @@
   ],
   "scripts": {
     "build": "tsc",
-    "check": "yarn test:unit && yarn format && yarn lint && yarn build",
     "format": "prettier --write \"(src|example|test)/**/*.ts\"",
     "lint": "tslint -p tsconfig.json",
     "prepare": "yarn build",

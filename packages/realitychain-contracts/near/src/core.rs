@@ -1,9 +1,8 @@
-use crate::*;
 use crate::metadata::ParcelMetadata;
+use crate::*;
 
 use near_sdk::{
-    assert_one_yocto, env, near_bindgen, serde_json::json, AccountId, Balance, BorshStorageKey,
-    PanicOnDefault, Promise, PromiseOrValue, Gas, ext_contract, Timestamp
+    assert_one_yocto, env, near_bindgen, serde_json::json, AccountId, Balance, PromiseOrValue,
 };
 
 #[near_bindgen]
@@ -28,8 +27,8 @@ impl RealityParcelsContract {
 
     #[init]
     pub fn new(
-        owner_id: ValidAccountId, 
-        treasury_id: ValidAccountId, 
+        owner_id: ValidAccountId,
+        treasury_id: ValidAccountId,
         metadata: NFTContractMetadata,
         current_fee: u16,
     ) -> Self {
@@ -49,10 +48,10 @@ impl RealityParcelsContract {
             transaction_fee: TransactionFee {
                 next_fee: None,
                 start_time: None,
-                current_fee
+                current_fee,
             },
-            market_data_transaction_fee: MarketDataTransactionFee{
-                transaction_fee: UnorderedMap::new(StorageKey::MarketDataTransactionFee)
+            market_data_transaction_fee: MarketDataTransactionFee {
+                transaction_fee: UnorderedMap::new(StorageKey::MarketDataTransactionFee),
             },
         }
     }
@@ -72,8 +71,8 @@ impl RealityParcelsContract {
             token_series_by_id: prev.token_series_by_id,
             treasury_id: prev.treasury_id,
             transaction_fee: prev.transaction_fee,
-            market_data_transaction_fee: MarketDataTransactionFee{
-                transaction_fee: UnorderedMap::new(StorageKey::MarketDataTransactionFee)
+            market_data_transaction_fee: MarketDataTransactionFee {
+                transaction_fee: UnorderedMap::new(StorageKey::MarketDataTransactionFee),
             },
         }
     }
@@ -106,8 +105,15 @@ impl RealityParcelsContract {
         }
     }
 
-    pub fn calculate_market_data_transaction_fee(&mut self, token_series_id: &TokenSeriesId) -> u128{
-        if let Some(transaction_fee) = self.market_data_transaction_fee.transaction_fee.get(token_series_id){
+    pub fn calculate_market_data_transaction_fee(
+        &mut self,
+        token_series_id: &TokenSeriesId,
+    ) -> u128 {
+        if let Some(transaction_fee) = self
+            .market_data_transaction_fee
+            .transaction_fee
+            .get(token_series_id)
+        {
             return transaction_fee;
         }
 
@@ -117,7 +123,9 @@ impl RealityParcelsContract {
 
     pub fn calculate_current_transaction_fee(&mut self) -> u128 {
         let transaction_fee: &TransactionFee = &self.transaction_fee;
-        if transaction_fee.next_fee.is_some() && to_sec(env::block_timestamp()) >= transaction_fee.start_time.unwrap() {
+        if transaction_fee.next_fee.is_some()
+            && to_sec(env::block_timestamp()) >= transaction_fee.start_time.unwrap()
+        {
             self.transaction_fee.current_fee = transaction_fee.next_fee.unwrap();
             self.transaction_fee.next_fee = None;
             self.transaction_fee.start_time = None;
@@ -129,14 +137,17 @@ impl RealityParcelsContract {
         &self.transaction_fee
     }
 
-    pub fn get_market_data_transaction_fee (&self, token_series_id: &TokenId) -> u128{
-        if let Some(transaction_fee) = self.market_data_transaction_fee.transaction_fee.get(token_series_id){
+    pub fn get_market_data_transaction_fee(&self, token_series_id: &TokenId) -> u128 {
+        if let Some(transaction_fee) = self
+            .market_data_transaction_fee
+            .transaction_fee
+            .get(token_series_id)
+        {
             return transaction_fee;
         }
         // fallback to default transaction fee
         self.transaction_fee.current_fee as u128
     }
-
 
     // Treasury
     #[payable]
@@ -164,7 +175,11 @@ impl RealityParcelsContract {
         let caller_id = env::predecessor_account_id();
 
         if creator_id.is_some() {
-            assert_eq!(creator_id.unwrap().to_string(), caller_id, "RealityChain: Caller is not creator_id");
+            assert_eq!(
+                creator_id.unwrap().to_string(),
+                caller_id,
+                "RealityChain: Caller is not creator_id"
+            );
         }
 
         let token_series_id = format!("{}", (self.token_series_by_id.len() + 1));
@@ -175,13 +190,15 @@ impl RealityParcelsContract {
         );
 
         let title = token_metadata.token_metadata.title.clone();
-        assert!(title.is_some(), "RealityChain: token_metadata.title is required");
-        
+        assert!(
+            title.is_some(),
+            "RealityChain: token_metadata.title is required"
+        );
 
         let mut total_perpetual = 0;
         let mut total_accounts = 0;
         let royalty_res: HashMap<AccountId, u32> = if let Some(royalty) = royalty {
-            for (k , v) in royalty.iter() {
+            for (k, v) in royalty.iter() {
                 if !is_valid_account_id(k.as_bytes()) {
                     env::panic("Not valid account_id for royalty".as_bytes());
                 };
@@ -193,7 +210,10 @@ impl RealityParcelsContract {
             HashMap::new()
         };
 
-        assert!(total_accounts <= 10, "RealityChain: royalty exceeds 10 accounts");
+        assert!(
+            total_accounts <= 10,
+            "RealityChain: royalty exceeds 10 accounts"
+        );
 
         assert!(
             total_perpetual <= 9000,
@@ -211,24 +231,29 @@ impl RealityParcelsContract {
             None
         };
 
-        self.token_series_by_id.insert(&token_series_id, &TokenSeries{
-            metadata: token_metadata.clone(),
-            creator_id: caller_id.to_string(),
-            tokens: UnorderedSet::new(
-                StorageKey::TokensBySeriesInner {
-                    token_series: token_series_id.clone(),
-                }
-                .try_to_vec()
-                .unwrap(),
-            ),
-            price: price_res,
-            is_mintable: true,
-            royalty: royalty_res.clone(),
-        });
+        self.token_series_by_id.insert(
+            &token_series_id,
+            &TokenSeries {
+                metadata: token_metadata.clone(),
+                creator_id: caller_id.to_string(),
+                tokens: UnorderedSet::new(
+                    StorageKey::TokensBySeriesInner {
+                        token_series: token_series_id.clone(),
+                    }
+                    .try_to_vec()
+                    .unwrap(),
+                ),
+                price: price_res,
+                is_mintable: true,
+                royalty: royalty_res.clone(),
+            },
+        );
 
         // set market data transaction fee
         let current_transaction_fee = self.calculate_current_transaction_fee();
-        self.market_data_transaction_fee.transaction_fee.insert(&token_series_id, &current_transaction_fee);
+        self.market_data_transaction_fee
+            .transaction_fee
+            .insert(&token_series_id, &current_transaction_fee);
 
         env::log(
             json!({
@@ -248,24 +273,27 @@ impl RealityParcelsContract {
 
         refund_deposit(env::storage_usage() - initial_storage_usage, 0);
 
-		TokenSeriesJson{
+        TokenSeriesJson {
             token_series_id,
-			metadata: token_metadata,
-			creator_id: caller_id,
+            metadata: token_metadata,
+            creator_id: caller_id,
             royalty: royalty_res,
-            transaction_fee: Some(current_transaction_fee.into()) 
-		}
+            transaction_fee: Some(current_transaction_fee.into()),
+        }
     }
 
     #[payable]
     pub fn nft_decrease_series_copies(
-        &mut self, 
-        token_series_id: TokenSeriesId, 
-        decrease_copies: U64
+        &mut self,
+        token_series_id: TokenSeriesId,
+        decrease_copies: U64,
     ) -> U64 {
         assert_one_yocto();
 
-        let mut token_series = self.token_series_by_id.get(&token_series_id).expect("Token series not exist");
+        let mut token_series = self
+            .token_series_by_id
+            .get(&token_series_id)
+            .expect("Token series not exist");
         assert_eq!(
             env::predecessor_account_id(),
             token_series.creator_id,
@@ -277,7 +305,8 @@ impl RealityParcelsContract {
 
         assert!(
             (copies - decrease_copies.0) >= minted_copies,
-            "RealityChain: cannot decrease supply, already minted : {}", minted_copies
+            "RealityChain: cannot decrease supply, already minted : {}",
+            minted_copies
         );
 
         let is_non_mintable = if (copies - decrease_copies.0) == minted_copies {
@@ -289,7 +318,8 @@ impl RealityParcelsContract {
 
         token_series.metadata.token_metadata.copies = Some(copies - decrease_copies.0);
 
-        self.token_series_by_id.insert(&token_series_id, &token_series);
+        self.token_series_by_id
+            .insert(&token_series_id, &token_series);
         env::log(
             json!({
                 "type": "nft_decrease_series_copies",
@@ -306,10 +336,17 @@ impl RealityParcelsContract {
     }
 
     #[payable]
-    pub fn nft_set_series_price(&mut self, token_series_id: TokenSeriesId, price: Option<U128>) -> Option<U128> {
+    pub fn nft_set_series_price(
+        &mut self,
+        token_series_id: TokenSeriesId,
+        price: Option<U128>,
+    ) -> Option<U128> {
         assert_one_yocto();
 
-        let mut token_series = self.token_series_by_id.get(&token_series_id).expect("Token series not exist");
+        let mut token_series = self
+            .token_series_by_id
+            .get(&token_series_id)
+            .expect("Token series not exist");
         assert_eq!(
             env::predecessor_account_id(),
             token_series.creator_id,
@@ -332,11 +369,14 @@ impl RealityParcelsContract {
             token_series.price = None;
         }
 
-        self.token_series_by_id.insert(&token_series_id, &token_series);
+        self.token_series_by_id
+            .insert(&token_series_id, &token_series);
 
         // set market data transaction fee
         let current_transaction_fee = self.calculate_current_transaction_fee();
-        self.market_data_transaction_fee.transaction_fee.insert(&token_series_id, &current_transaction_fee);
+        self.market_data_transaction_fee
+            .transaction_fee
+            .insert(&token_series_id, &current_transaction_fee);
 
         env::log(
             json!({
@@ -359,11 +399,7 @@ impl RealityParcelsContract {
         assert_one_yocto();
 
         let owner_id = self.tokens.owner_by_id.get(&token_id).unwrap();
-        assert_eq!(
-            owner_id,
-            env::predecessor_account_id(),
-            "Token owner only"
-        );
+        assert_eq!(owner_id, env::predecessor_account_id(), "Token owner only");
 
         if let Some(next_approval_id_by_id) = &mut self.tokens.next_approval_id_by_id {
             next_approval_id_by_id.remove(&token_id);
@@ -385,27 +421,25 @@ impl RealityParcelsContract {
 
         self.tokens.owner_by_id.remove(&token_id);
 
-        NearEvent::log_nft_burn(
-            owner_id,
-            vec![token_id],
-            None,
-            None,
-        );
+        NearEvent::log_nft_burn(owner_id, vec![token_id], None, None);
     }
 
     // CUSTOM VIEWS
 
-	pub fn nft_get_series_single(&self, token_series_id: TokenSeriesId) -> TokenSeriesJson {
-		let token_series = self.token_series_by_id.get(&token_series_id).expect("Series does not exist");
+    pub fn nft_get_series_single(&self, token_series_id: TokenSeriesId) -> TokenSeriesJson {
+        let token_series = self
+            .token_series_by_id
+            .get(&token_series_id)
+            .expect("Series does not exist");
         let current_transaction_fee = self.get_market_data_transaction_fee(&token_series_id);
-		TokenSeriesJson{
+        TokenSeriesJson {
             token_series_id,
-			metadata: token_series.metadata,
-			creator_id: token_series.creator_id,
+            metadata: token_series.metadata,
+            creator_id: token_series.creator_id,
             royalty: token_series.royalty,
-            transaction_fee: Some(current_transaction_fee.into()) 
-		}
-	}
+            transaction_fee: Some(current_transaction_fee.into()),
+        }
+    }
 
     pub fn nft_get_series_format(self) -> (char, &'static str, &'static str) {
         (TOKEN_DELIMETER, TITLE_DELIMETER, EDITION_DELIMETER)
@@ -433,18 +467,23 @@ impl RealityParcelsContract {
             .iter()
             .skip(start_index as usize)
             .take(limit)
-            .map(|(token_series_id, token_series)| TokenSeriesJson{
+            .map(|(token_series_id, token_series)| TokenSeriesJson {
                 token_series_id,
                 metadata: token_series.metadata,
                 creator_id: token_series.creator_id,
                 royalty: token_series.royalty,
-                transaction_fee: None 
+                transaction_fee: None,
             })
             .collect()
     }
 
     pub fn nft_supply_for_series(&self, token_series_id: TokenSeriesId) -> U64 {
-        self.token_series_by_id.get(&token_series_id).expect("Token series not exist").tokens.len().into()
+        self.token_series_by_id
+            .get(&token_series_id)
+            .expect("Token series not exist")
+            .tokens
+            .len()
+            .into()
     }
 
     pub fn nft_tokens_by_series(
@@ -454,7 +493,11 @@ impl RealityParcelsContract {
         limit: Option<u64>,
     ) -> Vec<Token> {
         let start_index: u128 = from_index.map(From::from).unwrap_or_default();
-        let tokens = self.token_series_by_id.get(&token_series_id).unwrap().tokens;
+        let tokens = self
+            .token_series_by_id
+            .get(&token_series_id)
+            .unwrap()
+            .tokens;
         assert!(
             (tokens.len() as u128) > start_index,
             "Out of bounds, please use a smaller from_index."
@@ -481,9 +524,19 @@ impl RealityParcelsContract {
         // CUSTOM (switch metadata for the token_series metadata)
         let mut token_id_iter = token_id.split(TOKEN_DELIMETER);
         let token_series_id = token_id_iter.next().unwrap().parse().unwrap();
-                let series_metadata = self.token_series_by_id.get(&token_series_id).unwrap().metadata;
+        let series_metadata = self
+            .token_series_by_id
+            .get(&token_series_id)
+            .unwrap()
+            .metadata;
 
-        let mut token_metadata = self.tokens.token_metadata_by_id.as_ref().unwrap().get(&token_id).unwrap();
+        let mut token_metadata = self
+            .tokens
+            .token_metadata_by_id
+            .as_ref()
+            .unwrap()
+            .get(&token_id)
+            .unwrap();
 
         token_metadata.title = Some(format!(
             "{}{}{}",
@@ -516,9 +569,15 @@ impl RealityParcelsContract {
     ) {
         let sender_id = env::predecessor_account_id();
         let receiver_id_str = receiver_id.to_string();
-        let (previous_owner_id, _) = self.tokens.internal_transfer(&sender_id, &receiver_id_str, &token_id, approval_id, memo.clone());
+        let (previous_owner_id, _) = self.tokens.internal_transfer(
+            &sender_id,
+            &receiver_id_str,
+            &token_id,
+            approval_id,
+            memo.clone(),
+        );
 
-        let authorized_id : Option<AccountId> = if sender_id != previous_owner_id {
+        let authorized_id: Option<AccountId> = if sender_id != previous_owner_id {
             Some(sender_id)
         } else {
             None
@@ -542,14 +601,19 @@ impl RealityParcelsContract {
         memo: Option<String>,
     ) {
         let sender_id = env::predecessor_account_id();
-        let previous_owner_id = self.tokens.owner_by_id.get(&token_id).expect("Token not found");
+        let previous_owner_id = self
+            .tokens
+            .owner_by_id
+            .get(&token_id)
+            .expect("Token not found");
         let receiver_id_str = receiver_id.to_string();
-        self.tokens.nft_transfer(receiver_id, token_id.clone(), approval_id, memo.clone());
+        self.tokens
+            .nft_transfer(receiver_id, token_id.clone(), approval_id, memo.clone());
 
-        let authorized_id : Option<AccountId> = if sender_id != previous_owner_id {
+        let authorized_id: Option<AccountId> = if sender_id != previous_owner_id {
             Some(sender_id)
         } else {
-             None
+            None
         };
 
         NearEvent::log_nft_transfer(
@@ -557,7 +621,7 @@ impl RealityParcelsContract {
             receiver_id_str,
             vec![token_id],
             memo,
-             authorized_id,
+            authorized_id,
         );
     }
 
@@ -580,7 +644,7 @@ impl RealityParcelsContract {
             memo.clone(),
         );
 
-        let authorized_id : Option<AccountId> = if sender_id != previous_owner_id {
+        let authorized_id: Option<AccountId> = if sender_id != previous_owner_id {
             Some(sender_id.clone())
         } else {
             None
@@ -681,83 +745,104 @@ impl RealityParcelsContract {
             .collect()
     }
 
-    pub fn nft_payout(
-        &self, 
-        token_id: TokenId,
-        balance: U128, 
-        max_len_payout: u32
-    ) -> Payout{
+    pub fn nft_payout(&self, token_id: TokenId, balance: U128, max_len_payout: u32) -> Payout {
         let owner_id = self.tokens.owner_by_id.get(&token_id).expect("No token id");
         let mut token_id_iter = token_id.split(TOKEN_DELIMETER);
         let token_series_id = token_id_iter.next().unwrap().parse().unwrap();
-        let royalty = self.token_series_by_id.get(&token_series_id).expect("no type").royalty;
+        let royalty = self
+            .token_series_by_id
+            .get(&token_series_id)
+            .expect("no type")
+            .royalty;
 
-        assert!(royalty.len() as u32 <= max_len_payout, "Market cannot payout to that many receivers");
+        assert!(
+            royalty.len() as u32 <= max_len_payout,
+            "Market cannot payout to that many receivers"
+        );
 
         let balance_u128: u128 = balance.into();
 
-        let mut payout: Payout = Payout { payout: HashMap::new() };
+        let mut payout: Payout = Payout {
+            payout: HashMap::new(),
+        };
         let mut total_perpetual = 0;
 
         for (k, v) in royalty.iter() {
             if *k != owner_id {
                 let key = k.clone();
-                payout.payout.insert(key, royalty_to_payout(*v, balance_u128));
+                payout
+                    .payout
+                    .insert(key, royalty_to_payout(*v, balance_u128));
                 total_perpetual += *v;
             }
         }
-        payout.payout.insert(owner_id, royalty_to_payout(10000 - total_perpetual, balance_u128));
+        payout.payout.insert(
+            owner_id,
+            royalty_to_payout(10000 - total_perpetual, balance_u128),
+        );
         payout
     }
 
     #[payable]
     pub fn nft_transfer_payout(
-        &mut self, 
+        &mut self,
         receiver_id: ValidAccountId,
         token_id: TokenId,
         approval_id: Option<u64>,
         balance: Option<U128>,
-        max_len_payout: Option<u32>
+        max_len_payout: Option<u32>,
     ) -> Option<Payout> {
         assert_one_yocto();
 
         let sender_id = env::predecessor_account_id();
         // Transfer
         let previous_token = self.nft_token(token_id.clone()).expect("no token");
-        self.tokens.nft_transfer(receiver_id.clone(), token_id.clone(), approval_id, None);
+        self.tokens
+            .nft_transfer(receiver_id.clone(), token_id.clone(), approval_id, None);
 
         // Payout calculation
         let previous_owner_id = previous_token.owner_id;
         let mut total_perpetual = 0;
         let payout = if let Some(balance) = balance {
             let balance_u128: u128 = u128::from(balance);
-            let mut payout: Payout = Payout { payout: HashMap::new() };
+            let mut payout: Payout = Payout {
+                payout: HashMap::new(),
+            };
 
             let mut token_id_iter = token_id.split(TOKEN_DELIMETER);
             let token_series_id = token_id_iter.next().unwrap().parse().unwrap();
-            let royalty = self.token_series_by_id.get(&token_series_id).expect("no type").royalty;
+            let royalty = self
+                .token_series_by_id
+                .get(&token_series_id)
+                .expect("no type")
+                .royalty;
 
-            assert!(royalty.len() as u32 <= max_len_payout.unwrap(), "Market cannot payout to that many receivers");
+            assert!(
+                royalty.len() as u32 <= max_len_payout.unwrap(),
+                "Market cannot payout to that many receivers"
+            );
             for (k, v) in royalty.iter() {
                 let key = k.clone();
                 if key != previous_owner_id {
-                    payout.payout.insert(key, royalty_to_payout(*v, balance_u128));
+                    payout
+                        .payout
+                        .insert(key, royalty_to_payout(*v, balance_u128));
                     total_perpetual += *v;
                 }
             }
 
-            assert!(
-                total_perpetual <= 10000,
-                "Total payout overflow"
-            );
+            assert!(total_perpetual <= 10000, "Total payout overflow");
 
-            payout.payout.insert(previous_owner_id.clone(), royalty_to_payout(10000 - total_perpetual, balance_u128));
+            payout.payout.insert(
+                previous_owner_id.clone(),
+                royalty_to_payout(10000 - total_perpetual, balance_u128),
+            );
             Some(payout)
         } else {
             None
         };
 
-        let authorized_id : Option<AccountId> = if sender_id != previous_owner_id {
+        let authorized_id: Option<AccountId> = if sender_id != previous_owner_id {
             Some(sender_id)
         } else {
             None

@@ -1,10 +1,10 @@
 use near_contract_standards::non_fungible_token::metadata::TokenMetadata;
 use near_contract_standards::non_fungible_token::TokenId;
 use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
-use near_sdk::serde::{Deserialize, Serialize};
-use near_sdk::json_types::U128;
 use near_sdk::collections::{UnorderedMap, UnorderedSet};
-use near_sdk::{AccountId, Balance, PanicOnDefault, BorshStorageKey};
+use near_sdk::json_types::U128;
+use near_sdk::serde::{Deserialize, Serialize};
+use near_sdk::{AccountId, Balance, BorshStorageKey, PanicOnDefault};
 use std::collections::HashMap;
 
 pub type TokenSeriesId = String;
@@ -28,22 +28,22 @@ pub struct ParcelMetadata {
 
 #[derive(BorshDeserialize, BorshSerialize)]
 pub struct TokenSeries {
-	pub metadata: ParcelMetadata,
-	pub creator_id: AccountId,
-	pub tokens: UnorderedSet<TokenId>,
+    pub metadata: ParcelMetadata,
+    pub creator_id: AccountId,
+    pub tokens: UnorderedSet<TokenId>,
     pub price: Option<Balance>,
     pub is_mintable: bool,
-    pub royalty: HashMap<AccountId, u32>
+    pub royalty: HashMap<AccountId, u32>,
 }
 
 #[derive(Serialize, Deserialize)]
 #[serde(crate = "near_sdk::serde")]
 pub struct TokenSeriesJson {
     pub token_series_id: TokenSeriesId,
-	pub metadata: ParcelMetadata,
-	pub creator_id: AccountId,
+    pub metadata: ParcelMetadata,
+    pub creator_id: AccountId,
     pub royalty: HashMap<AccountId, u32>,
-    pub transaction_fee: Option<U128>
+    pub transaction_fee: Option<U128>,
 }
 
 #[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize)]
@@ -56,7 +56,7 @@ pub struct TransactionFee {
 
 #[derive(BorshDeserialize, BorshSerialize, PanicOnDefault)]
 pub struct MarketDataTransactionFee {
-    pub transaction_fee: UnorderedMap<TokenSeriesId, u128>
+    pub transaction_fee: UnorderedMap<TokenSeriesId, u128>,
 }
 
 #[derive(BorshSerialize, BorshStorageKey)]

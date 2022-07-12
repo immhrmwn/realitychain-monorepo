@@ -8,24 +8,23 @@ use near_contract_standards::non_fungible_token::NonFungibleToken;
 use near_contract_standards::non_fungible_token::{Token, TokenId};
 use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
 use near_sdk::collections::{LazyOption, UnorderedMap, UnorderedSet};
+use near_sdk::env::is_valid_account_id;
 use near_sdk::json_types::{ValidAccountId, U128, U64};
 use near_sdk::{
-    assert_one_yocto, env, near_bindgen, serde_json::json, AccountId, Balance, BorshStorageKey,
-    PanicOnDefault, Promise, PromiseOrValue, Gas, ext_contract, Timestamp
+    env, ext_contract, near_bindgen, AccountId, Balance, Gas, PanicOnDefault, Promise, Timestamp,
 };
 use std::collections::HashMap;
-use near_sdk::env::is_valid_account_id;
 
-mod mint;
 mod core;
 mod event;
 mod metadata;
+mod mint;
 pub use event::NearEvent;
 pub use metadata::StorageKey;
 
 use crate::metadata::{
-    TokenSeries, TokenSeriesJson, TransactionFee, TokenSeriesId, TimestampSec, Payout,
-    MarketDataTransactionFee, ParcelMetadata
+    MarketDataTransactionFee, Payout, TimestampSec, TokenSeries, TokenSeriesId, TokenSeriesJson,
+    TransactionFee,
 };
 
 /// between token_series_id and edition number e.g. 42:2 where 42 is series and 2 is edition
@@ -78,9 +77,9 @@ pub struct RealityParcelsContractV1 {
     tokens: NonFungibleToken,
     metadata: LazyOption<NFTContractMetadata>,
     // CUSTOM
-	token_series_by_id: UnorderedMap<TokenSeriesId, TokenSeries>,
+    token_series_by_id: UnorderedMap<TokenSeriesId, TokenSeries>,
     treasury_id: AccountId,
-    transaction_fee: TransactionFee
+    transaction_fee: TransactionFee,
 }
 
 #[near_bindgen]
@@ -92,7 +91,7 @@ pub struct RealityParcelsContract {
     token_series_by_id: UnorderedMap<TokenSeriesId, TokenSeries>,
     treasury_id: AccountId,
     transaction_fee: TransactionFee,
-    market_data_transaction_fee: MarketDataTransactionFee
+    market_data_transaction_fee: MarketDataTransactionFee,
 }
 
 const DATA_IMAGE_SVG_REAL_ICON: &str = "data:image/svg+xml,%3Csvg width='1080' height='1080' viewBox='0 0 1080 1080' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='1080' height='1080' rx='10' fill='%230000BA'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M335.238 896.881L240 184L642.381 255.288C659.486 259.781 675.323 263.392 689.906 266.718C744.744 279.224 781.843 287.684 801.905 323.725C827.302 369.032 840 424.795 840 491.014C840 557.55 827.302 613.471 801.905 658.779C776.508 704.087 723.333 726.74 642.381 726.74H468.095L501.429 896.881H335.238ZM387.619 331.329L604.777 369.407C614.008 371.807 622.555 373.736 630.426 375.513C660.02 382.193 680.042 386.712 690.869 405.963C704.575 430.164 711.428 459.95 711.428 495.321C711.428 530.861 704.575 560.731 690.869 584.932C677.163 609.133 648.466 621.234 604.777 621.234H505.578L445.798 616.481L387.619 331.329Z' fill='white'/%3E%3C/svg%3E";
@@ -123,13 +122,7 @@ impl NonFungibleTokenResolver for RealityParcelsContract {
 
         // if not successful, return nft back to original owner
         if !resp {
-            NearEvent::log_nft_transfer(
-                receiver_id,
-                previous_owner_id,
-                vec![token_id],
-                None,
-                None,
-            );
+            NearEvent::log_nft_transfer(receiver_id, previous_owner_id, vec![token_id], None, None);
         }
 
         resp
@@ -158,13 +151,12 @@ fn to_sec(timestamp: Timestamp) -> TimestampSec {
     (timestamp / 10u64.pow(9)) as u32
 }
 
-
 #[cfg(all(test, not(target_arch = "wasm32")))]
 mod tests {
     use super::*;
     use near_sdk::test_utils::{accounts, VMContextBuilder};
+    use near_sdk::testing_env;
     use near_sdk::MockedBlockchain;
-    use near_sdk::{testing_env};
 
     const STORAGE_FOR_CREATE_SERIES: Balance = 8540000000000000000000;
     const STORAGE_FOR_MINT: Balance = 11280000000000000000000;
@@ -201,12 +193,18 @@ mod tests {
                 reference: None,
                 reference_hash: None,
             },
-            500
+            500,
         );
         testing_env!(context.is_view(true).build());
         assert_eq!(contract.get_owner(), accounts(1).to_string());
-        assert_eq!(contract.nft_metadata().base_uri.unwrap(), "https://ipfs.fleek.co/ipfs/".to_string());
-        assert_eq!(contract.nft_metadata().icon.unwrap(), DATA_IMAGE_SVG_REAL_ICON.to_string());
+        assert_eq!(
+            contract.nft_metadata().base_uri.unwrap(),
+            "https://ipfs.fleek.co/ipfs/".to_string()
+        );
+        assert_eq!(
+            contract.nft_metadata().icon.unwrap(),
+            DATA_IMAGE_SVG_REAL_ICON.to_string()
+        );
     }
 
     fn create_series(
@@ -217,7 +215,7 @@ mod tests {
     ) {
         contract.nft_create_series(
             None,
-            ParcelMetadata {
+            crate::metadata::ParcelMetadata {
                 world_id: "world_id".to_string(),
                 land_id: "land_id".to_string(),
                 land_x: 0,
@@ -227,7 +225,7 @@ mod tests {
                     title: Some("Tsundere land".to_string()),
                     description: None,
                     media: Some(
-                        "bafybeidzcan4nzcz7sczs4yzyxly4galgygnbjewipj6haco4kffoqpkiy".to_string()
+                        "bafybeidzcan4nzcz7sczs4yzyxly4galgygnbjewipj6haco4kffoqpkiy".to_string(),
                     ),
                     media_hash: None,
                     copies: copies,
@@ -237,10 +235,10 @@ mod tests {
                     updated_at: None,
                     extra: None,
                     reference: Some(
-                        "bafybeicg4ss7qh5odijfn2eogizuxkrdh3zlv4eftcmgnljwu7dm64uwji".to_string()
+                        "bafybeicg4ss7qh5odijfn2eogizuxkrdh3zlv4eftcmgnljwu7dm64uwji".to_string(),
                     ),
                     reference_hash: None,
-                }
+                },
             },
             price,
             Some(royalty.clone()),
@@ -253,8 +251,7 @@ mod tests {
         testing_env!(context
             .predecessor_account_id(accounts(1))
             .attached_deposit(STORAGE_FOR_CREATE_SERIES)
-            .build()
-        );
+            .build());
 
         let mut royalty: HashMap<AccountId, u32> = HashMap::new();
         royalty.insert(accounts(1).to_string(), 1000);
@@ -262,28 +259,17 @@ mod tests {
             &mut contract,
             &royalty,
             Some(U128::from(1 * 10u128.pow(24))),
-            None
+            None,
         );
 
         let nft_series_return = contract.nft_get_series_single("1".to_string());
-        assert_eq!(
-            nft_series_return.creator_id,
-            accounts(1).to_string()
-        );
+        assert_eq!(nft_series_return.creator_id, accounts(1).to_string());
 
-        assert_eq!(
-            nft_series_return.token_series_id,
-            "1",
-        );
+        assert_eq!(nft_series_return.token_series_id, "1",);
 
-        assert_eq!(
-            nft_series_return.royalty,
-            royalty,
-        );
+        assert_eq!(nft_series_return.royalty, royalty,);
 
-        assert!(
-            nft_series_return.metadata.token_metadata.copies.is_none()
-        );
+        assert!(nft_series_return.metadata.token_metadata.copies.is_none());
 
         assert_eq!(
             nft_series_return.metadata.token_metadata.title.unwrap(),
@@ -294,7 +280,6 @@ mod tests {
             nft_series_return.metadata.token_metadata.reference.unwrap(),
             "bafybeicg4ss7qh5odijfn2eogizuxkrdh3zlv4eftcmgnljwu7dm64uwji".to_string()
         );
-
     }
 
     #[test]
@@ -303,8 +288,7 @@ mod tests {
         testing_env!(context
             .predecessor_account_id(accounts(1))
             .attached_deposit(STORAGE_FOR_CREATE_SERIES)
-            .build()
-        );
+            .build());
 
         let mut royalty: HashMap<AccountId, u32> = HashMap::new();
         royalty.insert(accounts(1).to_string(), 1000);
@@ -313,14 +297,13 @@ mod tests {
             &mut contract,
             &royalty,
             Some(U128::from(1 * 10u128.pow(24))),
-            None
+            None,
         );
 
         testing_env!(context
             .predecessor_account_id(accounts(2))
             .attached_deposit(1 * 10u128.pow(24) + STORAGE_FOR_MINT)
-            .build()
-        );
+            .build());
 
         let token_id = contract.nft_buy("1".to_string(), accounts(2));
 
@@ -337,8 +320,7 @@ mod tests {
         testing_env!(context
             .predecessor_account_id(accounts(1))
             .attached_deposit(STORAGE_FOR_CREATE_SERIES)
-            .build()
-        );
+            .build());
 
         let mut royalty: HashMap<AccountId, u32> = HashMap::new();
         royalty.insert(accounts(1).to_string(), 1000);
@@ -348,8 +330,7 @@ mod tests {
         testing_env!(context
             .predecessor_account_id(accounts(1))
             .attached_deposit(STORAGE_FOR_MINT)
-            .build()
-        );
+            .build());
 
         let token_id = contract.nft_mint("1".to_string(), accounts(2));
 
@@ -367,8 +348,7 @@ mod tests {
         testing_env!(context
             .predecessor_account_id(accounts(1))
             .attached_deposit(STORAGE_FOR_CREATE_SERIES)
-            .build()
-        );
+            .build());
 
         let mut royalty: HashMap<AccountId, u32> = HashMap::new();
         royalty.insert(accounts(1).to_string(), 1000);
@@ -378,15 +358,13 @@ mod tests {
         testing_env!(context
             .predecessor_account_id(accounts(1))
             .attached_deposit(1)
-            .build()
-        );
+            .build());
         contract.nft_set_series_non_mintable("1".to_string());
 
         testing_env!(context
             .predecessor_account_id(accounts(1))
             .attached_deposit(STORAGE_FOR_MINT)
-            .build()
-        );
+            .build());
 
         contract.nft_mint("1".to_string(), accounts(2));
     }
@@ -398,8 +376,7 @@ mod tests {
         testing_env!(context
             .predecessor_account_id(accounts(1))
             .attached_deposit(STORAGE_FOR_CREATE_SERIES)
-            .build()
-        );
+            .build());
 
         let mut royalty: HashMap<AccountId, u32> = HashMap::new();
         royalty.insert(accounts(1).to_string(), 1000);
@@ -409,8 +386,7 @@ mod tests {
         testing_env!(context
             .predecessor_account_id(accounts(1))
             .attached_deposit(STORAGE_FOR_MINT)
-            .build()
-        );
+            .build());
 
         contract.nft_mint("1".to_string(), accounts(2));
         contract.nft_mint("1".to_string(), accounts(2));
@@ -422,8 +398,7 @@ mod tests {
         testing_env!(context
             .predecessor_account_id(accounts(1))
             .attached_deposit(STORAGE_FOR_CREATE_SERIES)
-            .build()
-        );
+            .build());
 
         let mut royalty: HashMap<AccountId, u32> = HashMap::new();
         royalty.insert(accounts(1).to_string(), 1000);
@@ -433,8 +408,7 @@ mod tests {
         testing_env!(context
             .predecessor_account_id(accounts(1))
             .attached_deposit(STORAGE_FOR_MINT)
-            .build()
-        );
+            .build());
 
         contract.nft_mint("1".to_string(), accounts(2));
         contract.nft_mint("1".to_string(), accounts(2));
@@ -442,8 +416,7 @@ mod tests {
         testing_env!(context
             .predecessor_account_id(accounts(1))
             .attached_deposit(1)
-            .build()
-        );
+            .build());
 
         contract.nft_decrease_series_copies("1".to_string(), U64::from(3));
     }
@@ -455,8 +428,7 @@ mod tests {
         testing_env!(context
             .predecessor_account_id(accounts(1))
             .attached_deposit(STORAGE_FOR_CREATE_SERIES)
-            .build()
-        );
+            .build());
 
         let mut royalty: HashMap<AccountId, u32> = HashMap::new();
         royalty.insert(accounts(1).to_string(), 1000);
@@ -466,8 +438,7 @@ mod tests {
         testing_env!(context
             .predecessor_account_id(accounts(1))
             .attached_deposit(STORAGE_FOR_MINT)
-            .build()
-        );
+            .build());
 
         contract.nft_mint("1".to_string(), accounts(2));
         contract.nft_mint("1".to_string(), accounts(2));
@@ -475,40 +446,41 @@ mod tests {
         testing_env!(context
             .predecessor_account_id(accounts(1))
             .attached_deposit(1)
-            .build()
-        );
+            .build());
 
         contract.nft_decrease_series_copies("1".to_string(), U64::from(4));
     }
 
     #[test]
-    #[should_panic( expected = "RealityChain: not for sale" )]
+    #[should_panic(expected = "RealityChain: not for sale")]
     fn test_invalid_buy_price_null() {
         let (mut context, mut contract) = setup_contract();
         testing_env!(context
             .predecessor_account_id(accounts(1))
             .attached_deposit(STORAGE_FOR_CREATE_SERIES)
-            .build()
-        );
+            .build());
 
         let mut royalty: HashMap<AccountId, u32> = HashMap::new();
         royalty.insert(accounts(1).to_string(), 1000);
 
-        create_series(&mut contract, &royalty, Some(U128::from(1 * 10u128.pow(24))), None);
+        create_series(
+            &mut contract,
+            &royalty,
+            Some(U128::from(1 * 10u128.pow(24))),
+            None,
+        );
 
         testing_env!(context
             .predecessor_account_id(accounts(1))
             .attached_deposit(1)
-            .build()
-        );
+            .build());
 
         contract.nft_set_series_price("1".to_string(), None);
 
         testing_env!(context
             .predecessor_account_id(accounts(2))
             .attached_deposit(1 * 10u128.pow(24) + STORAGE_FOR_MINT)
-            .build()
-        );
+            .build());
 
         let token_id = contract.nft_buy("1".to_string(), accounts(2));
 
@@ -520,25 +492,28 @@ mod tests {
     }
 
     #[test]
-    #[should_panic( expected = "RealityChain: price higher than 1000000000000000000000000000000000" )]
+    #[should_panic(expected = "RealityChain: price higher than 1000000000000000000000000000000000")]
     fn test_invalid_price_shouldnt_be_higher_than_max_price() {
         let (mut context, mut contract) = setup_contract();
         testing_env!(context
             .predecessor_account_id(accounts(1))
             .attached_deposit(STORAGE_FOR_CREATE_SERIES)
-            .build()
-        );
+            .build());
 
         let mut royalty: HashMap<AccountId, u32> = HashMap::new();
         royalty.insert(accounts(1).to_string(), 1000);
 
-        create_series(&mut contract, &royalty, Some(U128::from(1_000_000_000 * 10u128.pow(24))), None);
+        create_series(
+            &mut contract,
+            &royalty,
+            Some(U128::from(1_000_000_000 * 10u128.pow(24))),
+            None,
+        );
 
         testing_env!(context
             .predecessor_account_id(accounts(1))
             .attached_deposit(1)
-            .build()
-        );
+            .build());
     }
 
     #[test]
@@ -547,8 +522,7 @@ mod tests {
         testing_env!(context
             .predecessor_account_id(accounts(1))
             .attached_deposit(STORAGE_FOR_CREATE_SERIES)
-            .build()
-        );
+            .build());
 
         let mut royalty: HashMap<AccountId, u32> = HashMap::new();
         royalty.insert(accounts(1).to_string(), 1000);
@@ -558,16 +532,14 @@ mod tests {
         testing_env!(context
             .predecessor_account_id(accounts(1))
             .attached_deposit(STORAGE_FOR_MINT)
-            .build()
-        );
+            .build());
 
         let token_id = contract.nft_mint("1".to_string(), accounts(2));
 
         testing_env!(context
             .predecessor_account_id(accounts(2))
             .attached_deposit(1)
-            .build()
-        );
+            .build());
 
         contract.nft_burn(token_id.clone());
         let token = contract.nft_token(token_id);
@@ -580,8 +552,7 @@ mod tests {
         testing_env!(context
             .predecessor_account_id(accounts(1))
             .attached_deposit(STORAGE_FOR_CREATE_SERIES)
-            .build()
-        );
+            .build());
 
         let mut royalty: HashMap<AccountId, u32> = HashMap::new();
         royalty.insert(accounts(1).to_string(), 1000);
@@ -591,24 +562,19 @@ mod tests {
         testing_env!(context
             .predecessor_account_id(accounts(1))
             .attached_deposit(STORAGE_FOR_MINT)
-            .build()
-        );
+            .build());
 
         let token_id = contract.nft_mint("1".to_string(), accounts(2));
 
         testing_env!(context
             .predecessor_account_id(accounts(2))
             .attached_deposit(1)
-            .build()
-        );
+            .build());
 
         contract.nft_transfer(accounts(3), token_id.clone(), None, None);
 
         let token = contract.nft_token(token_id).unwrap();
-        assert_eq!(
-            token.owner_id,
-            accounts(3).to_string()
-        )
+        assert_eq!(token.owner_id, accounts(3).to_string())
     }
 
     #[test]
@@ -617,8 +583,7 @@ mod tests {
         testing_env!(context
             .predecessor_account_id(accounts(1))
             .attached_deposit(STORAGE_FOR_CREATE_SERIES)
-            .build()
-        );
+            .build());
 
         let mut royalty: HashMap<AccountId, u32> = HashMap::new();
         royalty.insert(accounts(1).to_string(), 1000);
@@ -628,23 +593,16 @@ mod tests {
         testing_env!(context
             .predecessor_account_id(accounts(1))
             .attached_deposit(STORAGE_FOR_MINT)
-            .build()
-        );
+            .build());
 
         let token_id = contract.nft_mint("1".to_string(), accounts(2));
 
-        testing_env!(context
-            .predecessor_account_id(accounts(2))
-            .build()
-        );
+        testing_env!(context.predecessor_account_id(accounts(2)).build());
 
         contract.nft_transfer_unsafe(accounts(3), token_id.clone(), None, None);
 
         let token = contract.nft_token(token_id).unwrap();
-        assert_eq!(
-            token.owner_id,
-            accounts(3).to_string()
-        )
+        assert_eq!(token.owner_id, accounts(3).to_string())
     }
 
     #[test]
@@ -653,8 +611,7 @@ mod tests {
         testing_env!(context
             .predecessor_account_id(accounts(1))
             .attached_deposit(STORAGE_FOR_CREATE_SERIES)
-            .build()
-        );
+            .build());
 
         let mut royalty: HashMap<AccountId, u32> = HashMap::new();
         royalty.insert(accounts(1).to_string(), 1000);
@@ -664,42 +621,37 @@ mod tests {
         testing_env!(context
             .predecessor_account_id(accounts(1))
             .attached_deposit(STORAGE_FOR_MINT)
-            .build()
-        );
+            .build());
 
         let token_id = contract.nft_mint("1".to_string(), accounts(2));
 
         testing_env!(context
             .predecessor_account_id(accounts(2))
             .attached_deposit(1)
-            .build()
-        );
+            .build());
 
         let payout = contract.nft_transfer_payout(
             accounts(3),
             token_id.clone(),
-            Some(0) ,
+            Some(0),
             Some(U128::from(1 * 10u128.pow(24))),
-            Some(10)
+            Some(10),
         );
 
         let mut payout_calc: HashMap<AccountId, U128> = HashMap::new();
         payout_calc.insert(
             accounts(1).to_string(),
-            U128::from((1000 * (1 * 10u128.pow(24)))/10_000)
+            U128::from((1000 * (1 * 10u128.pow(24))) / 10_000),
         );
         payout_calc.insert(
             accounts(2).to_string(),
-            U128::from((9000 * (1 * 10u128.pow(24))) / 10_000)
+            U128::from((9000 * (1 * 10u128.pow(24))) / 10_000),
         );
 
         assert_eq!(payout.unwrap().payout, payout_calc);
 
         let token = contract.nft_token(token_id).unwrap();
-        assert_eq!(
-            token.owner_id,
-            accounts(3).to_string()
-        )
+        assert_eq!(token.owner_id, accounts(3).to_string())
     }
 
     #[test]
@@ -709,8 +661,7 @@ mod tests {
         testing_env!(context
             .predecessor_account_id(accounts(0))
             .attached_deposit(1)
-            .build()
-        );
+            .build());
 
         contract.set_transaction_fee(100, None);
 
@@ -724,8 +675,7 @@ mod tests {
         testing_env!(context
             .predecessor_account_id(accounts(0))
             .attached_deposit(1)
-            .build()
-        );
+            .build());
 
         assert_eq!(contract.get_transaction_fee().current_fee, 500);
         assert_eq!(contract.get_transaction_fee().next_fee, None);
@@ -738,13 +688,15 @@ mod tests {
 
         assert_eq!(contract.get_transaction_fee().current_fee, 500);
         assert_eq!(contract.get_transaction_fee().next_fee, Some(next_fee));
-        assert_eq!(contract.get_transaction_fee().start_time, Some(start_time_sec));
+        assert_eq!(
+            contract.get_transaction_fee().start_time,
+            Some(start_time_sec)
+        );
 
         testing_env!(context
             .predecessor_account_id(accounts(1))
             .block_timestamp(start_time + 1)
-            .build()
-        );
+            .build());
 
         contract.calculate_current_transaction_fee();
         assert_eq!(contract.get_transaction_fee().current_fee, next_fee);
@@ -759,8 +711,7 @@ mod tests {
         testing_env!(context
             .predecessor_account_id(accounts(0))
             .attached_deposit(1)
-            .build()
-        );
+            .build());
 
         assert_eq!(contract.get_transaction_fee().current_fee, 500);
         assert_eq!(contract.get_transaction_fee().next_fee, None);
@@ -777,29 +728,34 @@ mod tests {
         testing_env!(context
             .predecessor_account_id(accounts(0))
             .attached_deposit(STORAGE_FOR_CREATE_SERIES)
-            .build()
-        );
+            .build());
 
-        create_series(&mut contract, &royalty, Some(U128::from(1 * 10u128.pow(24))), None);
+        create_series(
+            &mut contract,
+            &royalty,
+            Some(U128::from(1 * 10u128.pow(24))),
+            None,
+        );
 
         testing_env!(context
             .predecessor_account_id(accounts(0))
             .attached_deposit(1)
-            .build()
-        );
+            .build());
 
         contract.nft_set_series_price("1".to_string(), None);
 
         assert_eq!(contract.get_transaction_fee().current_fee, 500);
         assert_eq!(contract.get_transaction_fee().next_fee, Some(next_fee));
-        assert_eq!(contract.get_transaction_fee().start_time, Some(start_time_sec));
+        assert_eq!(
+            contract.get_transaction_fee().start_time,
+            Some(start_time_sec)
+        );
 
         testing_env!(context
             .predecessor_account_id(accounts(1))
             .block_timestamp(start_time + 1)
             .attached_deposit(1)
-            .build()
-        );
+            .build());
 
         contract.calculate_current_transaction_fee();
         assert_eq!(contract.get_transaction_fee().current_fee, next_fee);
