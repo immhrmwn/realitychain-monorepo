@@ -4,8 +4,8 @@ export interface TokenMetadata {
   title: string;
   media: string;
   reference: string;
-  copies: number;
   issued_at: string;
+  copies: Nullable<number>;
   description: Nullable<string>;
   media_hash: Nullable<string>;
   expires_at: Nullable<string>;
@@ -38,6 +38,15 @@ export interface TokenSeriesJson {
   creator_id: string;
   royalty: Royalty;
   transaction_fee: string;
+}
+
+export interface TokenSeriesIdDto {
+  token_series_id: string;
+}
+
+export interface NftDecreaseSeriesCopiesDto {
+  token_series_id: string;
+  decrease_copies: string;
 }
 
 export interface NftBuyDto {

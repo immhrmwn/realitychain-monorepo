@@ -1,16 +1,36 @@
 import * as nearAPI from 'near-api-js';
-import { NftBuyDto, NftCreateSeriesDto, NftMintDto, TokenSeriesJson } from './interfaces';
+import { oneYoctoNear } from './constant';
+import {
+  NftBuyDto,
+  NftCreateSeriesDto,
+  NftDecreaseSeriesCopiesDto,
+  NftMintDto,
+  TokenSeriesIdDto,
+  TokenSeriesJson,
+} from './interfaces';
 
 export async function nftCreateSeries(
   contract: nearAPI.Contract,
   args: NftCreateSeriesDto,
   gas: number = 300000000000000,
-  amount: string = '8540000000000000000000',
+  amount: string = '7090000000000000000000',
 ): Promise<TokenSeriesJson> {
   return (await (contract as any).nft_create_series({
     args,
     gas,
     amount,
+  })) as TokenSeriesJson;
+}
+
+export async function nftSetSeriesNonMintable(
+  contract: nearAPI.Contract,
+  args: TokenSeriesIdDto,
+  gas: number = 300000000000000,
+): Promise<TokenSeriesJson> {
+  return (await (contract as any).nft_set_series_non_mintable({
+    args,
+    gas,
+    amount: oneYoctoNear,
   })) as TokenSeriesJson;
 }
 
@@ -37,5 +57,17 @@ export async function nftMint(
     args,
     gas,
     amount,
+  })) as any;
+}
+
+export async function nftDecreaseSeriesCopies(
+  contract: nearAPI.Contract,
+  args: NftDecreaseSeriesCopiesDto,
+  gas: number = 300000000000000,
+): Promise<any> {
+  return (await (contract as any).nft_decrease_series_copies({
+    args,
+    gas,
+    amount: oneYoctoNear,
   })) as any;
 }

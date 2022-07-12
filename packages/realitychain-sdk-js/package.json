@@ -16,7 +16,7 @@
     "preversion": "yarn lint",
     "version": "yarn format && git add -A src",
     "postversion": "git push && git push --tags",
-    "test": "jest --config ./test/jest.json"
+    "test": "jest --config ./test/jest.json --runInBand"
   },
   "repository": {
     "type": "git",

@@ -1,9 +1,26 @@
 import { keyStores } from 'near-api-js';
 import { testnetConfig } from '../src/constant';
 import { realityChainContractWithAccountId } from '../src/near-api';
-import { nftBuy, nftCreateSeries, nftMint } from '../src/change-methods';
+import {
+  nftBuy,
+  nftCreateSeries,
+  nftDecreaseSeriesCopies,
+  nftMint,
+  nftSetSeriesNonMintable,
+} from '../src/change-methods';
 import { nftGetSeriesSingle, nftToken } from '../src/view-methods';
-import { accountId, createNftBuyParams, createNftMintParams, nftCreateSeriesParams, nftCreateSeriesWithPriceParams } from './mock/mock-parameters';
+import {
+  accountId,
+  createNftBuyParams,
+  createNftDecreaseSeriesCopiesParams,
+  createNftMintParams,
+  nftCreateSeriesParams,
+  nftCreateSeriesWithPriceParams,
+  nullNftCreateSeriesParams,
+  oneNftCreateSeriesParams,
+  twoNftCreateSeriesParams,
+} from './mock/mock-parameters';
+import { TokenSeriesIdDto } from '../src/interfaces';
 
 describe('Contract Tests', () => {
   global.console = {
@@ -79,5 +96,75 @@ describe('Contract Tests', () => {
     expect(token.metadata.title.includes(nftCreateSeriesParams.token_metadata.title)).toBeTruthy();
     expect(token.metadata.media).toEqual(nftCreateSeriesParams.token_metadata.media);
     expect(token.metadata.reference).toEqual(nftCreateSeriesParams.token_metadata.reference);
+  }, 60000);
+
+  it('nft mint should throw non mintable', async () => {
+    // Arrange
+    const keyStore = new keyStores.UnencryptedFileSystemKeyStore(`${process.env.HOME}/.near-credentials/`);
+    const contract: any = await realityChainContractWithAccountId(accountId, keyStore, testnetConfig);
+    const ncs = await nftCreateSeries(contract, nullNftCreateSeriesParams);
+
+    // Act
+    await nftSetSeriesNonMintable(contract, { token_series_id: ncs.token_series_id } as TokenSeriesIdDto);
+
+    // Assert
+    await expect(nftMint(contract, createNftMintParams(ncs.token_series_id))).rejects.toThrow();
+  }, 60000);
+
+  it('nft mint should throw', async () => {
+    // Arrange
+    const keyStore = new keyStores.UnencryptedFileSystemKeyStore(`${process.env.HOME}/.near-credentials/`);
+    const contract: any = await realityChainContractWithAccountId(accountId, keyStore, testnetConfig);
+    const ncs = await nftCreateSeries(contract, oneNftCreateSeriesParams);
+
+    // Act
+    await nftMint(contract, createNftMintParams(ncs.token_series_id));
+
+    // Assert
+    await expect(nftMint(contract, createNftMintParams(ncs.token_series_id))).rejects.toThrow();
+  }, 60000);
+
+  it('nft decrease series copies should return', async () => {
+    // Arrange
+    const keyStore = new keyStores.UnencryptedFileSystemKeyStore(`${process.env.HOME}/.near-credentials/`);
+    const contract: any = await realityChainContractWithAccountId(accountId, keyStore, testnetConfig);
+    const ncs = await nftCreateSeries(contract, nftCreateSeriesParams);
+
+    const ret = await nftMint(contract, createNftMintParams(ncs.token_series_id));
+    const token = await nftToken(contract, ret);
+
+    expect(ret).toEqual(`${ncs.token_series_id}:1`);
+    expect(token.token_id).toEqual(ret);
+    expect(token.metadata.title.includes(nftCreateSeriesParams.token_metadata.title)).toBeTruthy();
+    expect(token.metadata.media).toEqual(nftCreateSeriesParams.token_metadata.media);
+    expect(token.metadata.reference).toEqual(nftCreateSeriesParams.token_metadata.reference);
+
+    await nftMint(contract, createNftMintParams(ncs.token_series_id));
+
+    // Assert
+    await nftDecreaseSeriesCopies(contract, createNftDecreaseSeriesCopiesParams(ncs.token_series_id));
+  }, 60000);
+
+  it('nft decrease series copies should throw', async () => {
+    // Arrange
+    const keyStore = new keyStores.UnencryptedFileSystemKeyStore(`${process.env.HOME}/.near-credentials/`);
+    const contract: any = await realityChainContractWithAccountId(accountId, keyStore, testnetConfig);
+    const ncs = await nftCreateSeries(contract, twoNftCreateSeriesParams);
+
+    const ret = await nftMint(contract, createNftMintParams(ncs.token_series_id));
+    const token = await nftToken(contract, ret);
+
+    expect(ret).toEqual(`${ncs.token_series_id}:1`);
+    expect(token.token_id).toEqual(ret);
+    expect(token.metadata.title.includes(twoNftCreateSeriesParams.token_metadata.title)).toBeTruthy();
+    expect(token.metadata.media).toEqual(twoNftCreateSeriesParams.token_metadata.media);
+    expect(token.metadata.reference).toEqual(twoNftCreateSeriesParams.token_metadata.reference);
+
+    await nftMint(contract, createNftMintParams(ncs.token_series_id));
+
+    // Assert
+    await expect(
+      nftDecreaseSeriesCopies(contract, createNftDecreaseSeriesCopiesParams(ncs.token_series_id)),
+    ).rejects.toThrow();
   }, 60000);
 });

@@ -21,3 +21,5 @@ export const mainnetConfig: ContractConfig = {
   appName: 'Reality Chain Mainnet',
   contractName: `agustinustheo.near`,
 };
+
+export const oneYoctoNear: string = '1';
