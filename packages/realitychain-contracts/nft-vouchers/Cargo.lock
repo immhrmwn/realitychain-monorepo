@@ -417,7 +417,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "nft-contract"
+name = "nft-vouchers"
 version = "0.1.0"
 dependencies = [
  "near-contract-standards",

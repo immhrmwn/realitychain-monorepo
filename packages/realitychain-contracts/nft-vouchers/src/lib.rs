@@ -43,9 +43,9 @@ const MAX_PRICE: Balance = 1_000_000_000 * 10u128.pow(24);
 
 pub type ContractAndTokenId = String;
 
-// near_contract_standards::impl_non_fungible_token_core!(RealityParcelsContract, tokens);
-// near_contract_standards::impl_non_fungible_token_enumeration!(RealityParcelsContract, tokens);
-near_contract_standards::impl_non_fungible_token_approval!(RealityParcelsContract, tokens);
+// near_contract_standards::impl_non_fungible_token_core!(RealityParcelVouchersContract, tokens);
+// near_contract_standards::impl_non_fungible_token_enumeration!(RealityParcelVouchersContract, tokens);
+near_contract_standards::impl_non_fungible_token_approval!(RealityParcelVouchersContract, tokens);
 
 #[ext_contract(ext_non_fungible_token_receiver)]
 trait NonFungibleTokenReceiver {
@@ -73,7 +73,7 @@ trait NonFungibleTokenResolver {
 near_sdk::setup_alloc!();
 
 #[derive(BorshDeserialize, BorshSerialize, PanicOnDefault)]
-pub struct RealityParcelsContractV1 {
+pub struct RealityParcelVouchersContractV1 {
     tokens: NonFungibleToken,
     metadata: LazyOption<NFTContractMetadata>,
     // CUSTOM
@@ -84,7 +84,7 @@ pub struct RealityParcelsContractV1 {
 
 #[near_bindgen]
 #[derive(BorshDeserialize, BorshSerialize, PanicOnDefault)]
-pub struct RealityParcelsContract {
+pub struct RealityParcelVouchersContract {
     tokens: NonFungibleToken,
     metadata: LazyOption<NFTContractMetadata>,
     // CUSTOM
@@ -97,14 +97,14 @@ pub struct RealityParcelsContract {
 const DATA_IMAGE_SVG_REAL_ICON: &str = "data:image/svg+xml,%3Csvg width='1080' height='1080' viewBox='0 0 1080 1080' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='1080' height='1080' rx='10' fill='%230000BA'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M335.238 896.881L240 184L642.381 255.288C659.486 259.781 675.323 263.392 689.906 266.718C744.744 279.224 781.843 287.684 801.905 323.725C827.302 369.032 840 424.795 840 491.014C840 557.55 827.302 613.471 801.905 658.779C776.508 704.087 723.333 726.74 642.381 726.74H468.095L501.429 896.881H335.238ZM387.619 331.329L604.777 369.407C614.008 371.807 622.555 373.736 630.426 375.513C660.02 382.193 680.042 386.712 690.869 405.963C704.575 430.164 711.428 459.95 711.428 495.321C711.428 530.861 704.575 560.731 690.869 584.932C677.163 609.133 648.466 621.234 604.777 621.234H505.578L445.798 616.481L387.619 331.329Z' fill='white'/%3E%3C/svg%3E";
 
 #[near_bindgen]
-impl NonFungibleTokenMetadataProvider for RealityParcelsContract {
+impl NonFungibleTokenMetadataProvider for RealityParcelVouchersContract {
     fn nft_metadata(&self) -> NFTContractMetadata {
         self.metadata.get().unwrap()
     }
 }
 
 #[near_bindgen]
-impl NonFungibleTokenResolver for RealityParcelsContract {
+impl NonFungibleTokenResolver for RealityParcelVouchersContract {
     #[private]
     fn nft_resolve_transfer(
         &mut self,
@@ -170,10 +170,10 @@ mod tests {
         builder
     }
 
-    fn setup_contract() -> (VMContextBuilder, RealityParcelsContract) {
+    fn setup_contract() -> (VMContextBuilder, RealityParcelVouchersContract) {
         let mut context = VMContextBuilder::new();
         testing_env!(context.predecessor_account_id(accounts(0)).build());
-        let contract = RealityParcelsContract::new_default_meta(accounts(0), accounts(4));
+        let contract = RealityParcelVouchersContract::new_default_meta(accounts(0), accounts(4));
         (context, contract)
     }
 
@@ -181,7 +181,7 @@ mod tests {
     fn test_new() {
         let mut context = get_context(accounts(1));
         testing_env!(context.build());
-        let contract = RealityParcelsContract::new(
+        let contract = RealityParcelVouchersContract::new(
             accounts(1),
             accounts(4),
             NFTContractMetadata {
@@ -208,37 +208,30 @@ mod tests {
     }
 
     fn create_series(
-        contract: &mut RealityParcelsContract,
+        contract: &mut RealityParcelVouchersContract,
         royalty: &HashMap<AccountId, u32>,
         price: Option<U128>,
         copies: Option<u64>,
     ) {
         contract.nft_create_series(
             None,
-            crate::metadata::ParcelMetadata {
-                world_id: "world_id".to_string(),
-                land_id: "land_id".to_string(),
-                land_x: 0,
-                land_y: 0,
-                land_size: 0,
-                token_metadata: TokenMetadata {
-                    title: Some("Tsundere land".to_string()),
-                    description: None,
-                    media: Some(
-                        "bafybeidzcan4nzcz7sczs4yzyxly4galgygnbjewipj6haco4kffoqpkiy".to_string(),
-                    ),
-                    media_hash: None,
-                    copies: copies,
-                    issued_at: None,
-                    expires_at: None,
-                    starts_at: None,
-                    updated_at: None,
-                    extra: None,
-                    reference: Some(
-                        "bafybeicg4ss7qh5odijfn2eogizuxkrdh3zlv4eftcmgnljwu7dm64uwji".to_string(),
-                    ),
-                    reference_hash: None,
-                },
+            TokenMetadata {
+                title: Some("Tsundere land".to_string()),
+                description: None,
+                media: Some(
+                    "bafybeidzcan4nzcz7sczs4yzyxly4galgygnbjewipj6haco4kffoqpkiy".to_string(),
+                ),
+                media_hash: None,
+                copies: copies,
+                issued_at: None,
+                expires_at: None,
+                starts_at: None,
+                updated_at: None,
+                extra: None,
+                reference: Some(
+                    "bafybeicg4ss7qh5odijfn2eogizuxkrdh3zlv4eftcmgnljwu7dm64uwji".to_string(),
+                ),
+                reference_hash: None,
             },
             price,
             Some(royalty.clone()),
@@ -269,15 +262,15 @@ mod tests {
 
         assert_eq!(nft_series_return.royalty, royalty,);
 
-        assert!(nft_series_return.metadata.token_metadata.copies.is_none());
+        assert!(nft_series_return.metadata.copies.is_none());
 
         assert_eq!(
-            nft_series_return.metadata.token_metadata.title.unwrap(),
+            nft_series_return.metadata.title.unwrap(),
             "Tsundere land".to_string()
         );
 
         assert_eq!(
-            nft_series_return.metadata.token_metadata.reference.unwrap(),
+            nft_series_return.metadata.reference.unwrap(),
             "bafybeicg4ss7qh5odijfn2eogizuxkrdh3zlv4eftcmgnljwu7dm64uwji".to_string()
         );
     }

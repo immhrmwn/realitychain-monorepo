@@ -15,7 +15,7 @@ pub trait NonFungibleTokenReceiver {
 }
 
 #[near_bindgen]
-impl RealityParcelsContract {
+impl RealityParcelVouchersContract {
     #[payable]
     pub fn nft_mint(
         &mut self,
@@ -172,7 +172,6 @@ impl RealityParcelsContract {
         let num_tokens = token_series.tokens.len();
         let max_copies = token_series
             .metadata
-            .token_metadata
             .copies
             .unwrap_or(u64::MAX);
         assert!(num_tokens < max_copies, "Series supply maxed");
@@ -247,7 +246,7 @@ impl RealityParcelsContract {
         );
 
         assert_eq!(
-            token_series.metadata.token_metadata.copies, None,
+            token_series.metadata.copies, None,
             "RealityChain: decrease supply if copies not null"
         );
 
