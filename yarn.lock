@@ -3344,8 +3344,8 @@
   dependencies:
     "@openzeppelin/contracts" "^4.6.0"
 
-"@realitychain/near-nft@file:/home/agustinustheoo/work/realitychain-monorepo/packages/realitychain-contracts/near-nft":
-  "resolved" "file:packages/realitychain-contracts/near-nft"
+"@realitychain/nft-parcels@file:/home/agustinustheoo/work/realitychain-monorepo/packages/realitychain-contracts/nft-parcels":
+  "resolved" "file:packages/realitychain-contracts/nft-parcels"
   "version" "1.0.0"
 
 "@realitychain/sdk@*", "@realitychain/sdk@file:/home/agustinustheoo/work/realitychain-monorepo/packages/realitychain-sdk-js":

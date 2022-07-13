@@ -5,10 +5,10 @@
     "lerna": "lerna",
     "build": "lerna run --parallel build",
     "prepare": "lerna run --parallel prepare",
-    "lint": "lerna run --parallel lint --scope=@realitychain/{near-nft,erc20,sdk}",
-    "format": "lerna run --parallel format --scope=@realitychain/{near-nft,erc20,sdk}",
+    "lint": "lerna run --parallel lint --scope=@realitychain/{nft-parcels,nft-vouchers,erc20,sdk}",
+    "format": "lerna run --parallel format --scope=@realitychain/{nft-parcels,nft-vouchers,erc20,sdk}",
     "start": "yarn workspace @realitychain/webapp start",
-    "test": "lerna run --parallel test --scope=@realitychain/{near-nft,erc20,sdk}"
+    "test": "lerna run --parallel test --scope=@realitychain/{nft-parcels,nft-vouchers,erc20,sdk}"
   },
   "resolutions": {
     "**/ethers": "^5.6.8",

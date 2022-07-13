@@ -1,5 +1,5 @@
 {
-  "name": "@realitychain/near-nft",
+  "name": "@realitychain/nft-vouchers",
   "version": "1.0.0",
   "description": "Reality Chain NFT Smart Contract",
   "scripts": {
