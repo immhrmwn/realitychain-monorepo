@@ -1,11 +1,14 @@
 import React from "react";
-import "./App.css";
 import { Header } from "./components/Header";
 import { ConnectWallet } from "./components/ConnectWallet";
 import { HomePage } from "./components/HomePage";
 import { WorldComponent } from "./components/World";
+import { Prototype as DesignComponent } from "./components/Design/Prototype";
 import { login, logout } from "./utils";
 import ParcelComponent from "./components/Parcel/Parcel";
+import {ThemeProvider} from '@material-ui/core/styles';
+import theme from './themes/dark-theme';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
@@ -58,7 +61,8 @@ function App() {
   };
 
   return (
-    <div className="App">
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
       <Router>
         <Header
           onConnect={handleOpenModal}
@@ -71,6 +75,7 @@ function App() {
           onLogin={onLogin}
         />
         <Routes>
+          <Route path="/design" element={<DesignComponent />} />
           <Route path="/minting" element={<ParcelComponent />} />
           <Route
             path="/staking"
@@ -79,7 +84,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
         </Routes>
       </Router>
-    </div>
+    </ThemeProvider>
   );
 }
 
