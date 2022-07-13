@@ -3,8 +3,8 @@
   "private": true,
   "scripts": {
     "lerna": "lerna",
-    "build": "lerna run --parallel build",
-    "prepare": "lerna run --parallel prepare",
+    "build": "lerna run build",
+    "prepare": "lerna run prepare",
     "lint": "lerna run --parallel lint --scope=@realitychain/{nft-parcels,nft-vouchers,erc20,sdk}",
     "format": "lerna run --parallel format --scope=@realitychain/{nft-parcels,nft-vouchers,erc20,sdk}",
     "start": "yarn workspace @realitychain/webapp start",
