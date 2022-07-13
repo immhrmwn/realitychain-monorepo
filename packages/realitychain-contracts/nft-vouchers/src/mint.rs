@@ -170,10 +170,7 @@ impl RealityParcelVouchersContract {
         );
 
         let num_tokens = token_series.tokens.len();
-        let max_copies = token_series
-            .metadata
-            .copies
-            .unwrap_or(u64::MAX);
+        let max_copies = token_series.metadata.copies.unwrap_or(u64::MAX);
         assert!(num_tokens < max_copies, "Series supply maxed");
 
         if (num_tokens + 1) >= max_copies {
