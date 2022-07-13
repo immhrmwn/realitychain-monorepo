@@ -1,5 +1,5 @@
 [package]
-name = "nft-contract"
+name = "nft-parcels"
 version = "0.1.0"
 authors = ["Theo <agustinustheoo@gmail.com>"]
 edition = "2021"
