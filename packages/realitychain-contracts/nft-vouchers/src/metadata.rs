@@ -62,3 +62,9 @@ pub enum StorageKey {
     TokensPerOwner { account_hash: Vec<u8> },
     MarketDataTransactionFee,
 }
+
+#[derive(Serialize, Deserialize)]
+#[serde(crate = "near_sdk::serde")]
+pub struct StakeParams {
+	pub token_series_id: String,
+}
