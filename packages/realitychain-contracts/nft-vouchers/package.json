@@ -1,0 +1,36 @@
+{
+  "name": "@realitychain/near-nft",
+  "version": "1.0.0",
+  "description": "Reality Chain NFT Smart Contract",
+  "scripts": {
+    "build": "./build.sh",
+    "prepare": "yarn build",
+    "lint": "cargo clippy",
+    "format": "cargo fmt",
+    "test": "cargo test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/realitychainio/realitychain-monorepo.git"
+  },
+  "keywords": [
+    "solidity",
+    "hardhat",
+    "smartcontract",
+    "metaverse",
+    "token",
+    "cryptocurrency",
+    "crypto",
+    "ethereum",
+    "near",
+    "nearprotocol",
+    "erc20",
+    "nep141"
+  ],
+  "author": "Theo <agustinustheoo@gmail.com>",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/realitychainio/realitychain-monorepo/issues"
+  },
+  "homepage": "https://github.com/realitychainio/realitychain-monorepo#readme"
+}
