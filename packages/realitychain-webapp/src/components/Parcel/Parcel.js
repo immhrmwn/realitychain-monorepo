@@ -1,16 +1,32 @@
+import * as buffer from 'buffer';
+import 'regenerator-runtime/runtime';
+
 import React from "react";
 import { Container, Card, Button, Accordion } from "react-bootstrap";
 import MapImage from "../../assets/map.png";
+import { nftMint } from "@realitychain/sdk";
 
 const Parcel = () => {
-  // TODO: GET DATA MINTING PARCEL
+  window.Buffer = buffer.Buffer;
 
-  const handleMintingAll = () => {
-    // TODO: handle minting all
+  const handleMintingAll = async() => {
+    for(let i = 1; i <= 4; i++) {
+      await nftMint(window.contract, {
+        token_series_id: `${i}`,
+        receiver_id: window.contract.account.accountId
+      });
+    }
   };
-
-  const handleMinting = (data) => {
-    // TODO: handle minting
+  
+  const handleMinting = async (data) => {
+    await window.contract.nft_mint({
+      args: {
+        token_series_id: `${data}`,
+        receiver_id: window.accountId
+      },
+      gas: 300000000000000,
+      amount: '7090000000000000000000'
+    });
   };
 
   return (
@@ -41,297 +57,87 @@ const Parcel = () => {
             marginTop: 20,
           }}
         >
-          {/* TODO: MAPING DATA MINTING PARCEL */}
-          <Card style={{ width: 310, wordBreak: "break-word" }}>
-            <Card.Body>
-              <Card.Img variant="top" src={MapImage} />
-              <Card.Text style={{ fontSize: "18px" }}>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    padding: "0px 10px",
-                  }}
-                >
-                  <span style={{ fontWeight: 600 }}>world_id:</span>
-                  <span>jkt</span>
-                </div>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    padding: "0px 10px",
-                  }}
-                >
-                  <span style={{ fontWeight: 600 }}>land_id:</span>
-                  <span>jkt1</span>
-                </div>
-                <Accordion>
-                  <Accordion.Item eventKey="0">
-                    <Accordion.Header>Stats</Accordion.Header>
-                    <Accordion.Body>
+          {(() => {
+            const cards = [];
+            for (let i = 1; i <= 4; i++) {
+              cards.push(
+                <Card style={{ width: 310, wordBreak: "break-word" }}>
+                  <Card.Body>
+                    <Card.Img variant="top" src={MapImage} />
+                    <Card.Text style={{ fontSize: "18px" }}>
                       <div
                         style={{
                           display: "flex",
                           justifyContent: "space-between",
-                          color: "gray",
+                          padding: "0px 10px",
                         }}
                       >
-                        <span>Land X:</span>
-                        <span>224 of 408</span>
+                        <span style={{ fontWeight: 600 }}>world_id:</span>
+                        <span>jkt</span>
                       </div>
                       <div
                         style={{
                           display: "flex",
                           justifyContent: "space-between",
-                          color: "gray",
+                          padding: "0px 10px",
                         }}
                       >
-                        <span>Land Y:</span>
-                        <span>390 of 408</span>
+                        <span style={{ fontWeight: 600 }}>land_id:</span>
+                        <span>jkt1</span>
                       </div>
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          color: "gray",
-                        }}
-                      >
-                        <span>Land Size:</span>
-                        <span>1000m²</span>
-                      </div>
-                    </Accordion.Body>
-                  </Accordion.Item>
-                </Accordion>
-              </Card.Text>
-            </Card.Body>
-            <Card.Footer style={{ textAlign: "center" }}>
-              <Button
-                variant="dark"
-                disabled={!window.walletConnection.isSignedIn()}
-                onClick={handleMinting}
-              >
-                Minting
-              </Button>
-            </Card.Footer>
-          </Card>
-
-          <Card style={{ width: 310, wordBreak: "break-word" }}>
-            <Card.Body>
-              <Card.Img variant="top" src={MapImage} />
-              <Card.Text style={{ fontSize: "18px" }}>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    padding: "0px 10px",
-                  }}
-                >
-                  <span style={{ fontWeight: 600 }}>world_id:</span>
-                  <span>-</span>
-                </div>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    padding: "0px 10px",
-                  }}
-                >
-                  <span style={{ fontWeight: 600 }}>land_id:</span>
-                  <span>-</span>
-                </div>
-                <Accordion>
-                  <Accordion.Item eventKey="0">
-                    <Accordion.Header>Stats</Accordion.Header>
-                    <Accordion.Body>
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          color: "gray",
-                        }}
-                      >
-                        <span>Land X:</span>
-                        <span>224 of 408</span>
-                      </div>
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          color: "gray",
-                        }}
-                      >
-                        <span>Land Y:</span>
-                        <span>390 of 408</span>
-                      </div>
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          color: "gray",
-                        }}
-                      >
-                        <span>Land Size:</span>
-                        <span>0m²</span>
-                      </div>
-                    </Accordion.Body>
-                  </Accordion.Item>
-                </Accordion>
-              </Card.Text>
-            </Card.Body>
-            <Card.Footer style={{ textAlign: "center" }}>
-              <Button
-                variant="dark"
-                disabled={!window.walletConnection.isSignedIn()}
-              >
-                Minting
-              </Button>
-            </Card.Footer>
-          </Card>
-          <Card style={{ width: 310, wordBreak: "break-word" }}>
-            <Card.Body>
-              <Card.Img variant="top" src={MapImage} />
-              <Card.Text style={{ fontSize: "18px" }}>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    padding: "0px 10px",
-                  }}
-                >
-                  <span style={{ fontWeight: 600 }}>world_id:</span>
-                  <span>-</span>
-                </div>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    padding: "0px 10px",
-                  }}
-                >
-                  <span style={{ fontWeight: 600 }}>land_id:</span>
-                  <span>-</span>
-                </div>
-                <Accordion>
-                  <Accordion.Item eventKey="0">
-                    <Accordion.Header>Stats</Accordion.Header>
-                    <Accordion.Body>
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          color: "gray",
-                        }}
-                      >
-                        <span>Land X:</span>
-                        <span>224 of 408</span>
-                      </div>
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          color: "gray",
-                        }}
-                      >
-                        <span>Land Y:</span>
-                        <span>390 of 408</span>
-                      </div>
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          color: "gray",
-                        }}
-                      >
-                        <span>Land Size:</span>
-                        <span>0m²</span>
-                      </div>
-                    </Accordion.Body>
-                  </Accordion.Item>
-                </Accordion>
-              </Card.Text>
-            </Card.Body>
-            <Card.Footer style={{ textAlign: "center" }}>
-              <Button
-                variant="dark"
-                disabled={!window.walletConnection.isSignedIn()}
-              >
-                Minting
-              </Button>
-            </Card.Footer>
-          </Card>
-          <Card style={{ width: 310, wordBreak: "break-word" }}>
-            <Card.Body>
-              <Card.Img variant="top" src={MapImage} />
-              <Card.Text style={{ fontSize: "18px" }}>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    padding: "0px 10px",
-                  }}
-                >
-                  <span style={{ fontWeight: 600 }}>world_id:</span>
-                  <span>-</span>
-                </div>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    padding: "0px 10px",
-                  }}
-                >
-                  <span style={{ fontWeight: 600 }}>land_id:</span>
-                  <span>-</span>
-                </div>
-                <Accordion>
-                  <Accordion.Item eventKey="0">
-                    <Accordion.Header>Stats</Accordion.Header>
-                    <Accordion.Body>
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          color: "gray",
-                        }}
-                      >
-                        <span>Land X:</span>
-                        <span>224 of 408</span>
-                      </div>
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          color: "gray",
-                        }}
-                      >
-                        <span>Land Y:</span>
-                        <span>390 of 408</span>
-                      </div>
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          color: "gray",
-                        }}
-                      >
-                        <span>Land Size:</span>
-                        <span>0m²</span>
-                      </div>
-                    </Accordion.Body>
-                  </Accordion.Item>
-                </Accordion>
-              </Card.Text>
-            </Card.Body>
-            <Card.Footer style={{ textAlign: "center" }}>
-              <Button
-                variant="dark"
-                disabled={!window.walletConnection.isSignedIn()}
-              >
-                Minting
-              </Button>
-            </Card.Footer>
-          </Card>
+                      <Accordion>
+                        <Accordion.Item eventKey="0">
+                          <Accordion.Header>Stats</Accordion.Header>
+                          <Accordion.Body>
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                color: "gray",
+                              }}
+                            >
+                              <span>Land X:</span>
+                              <span>224 of 408</span>
+                            </div>
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                color: "gray",
+                              }}
+                            >
+                              <span>Land Y:</span>
+                              <span>390 of 408</span>
+                            </div>
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                color: "gray",
+                              }}
+                            >
+                              <span>Land Size:</span>
+                              <span>1000m²</span>
+                            </div>
+                          </Accordion.Body>
+                        </Accordion.Item>
+                      </Accordion>
+                    </Card.Text>
+                  </Card.Body>
+                  <Card.Footer style={{ textAlign: "center" }}>
+                    <Button
+                      variant="dark"
+                      disabled={!window.walletConnection.isSignedIn()}
+                      onClick={() => handleMinting(i)}
+                    >
+                      Minting
+                    </Button>
+                  </Card.Footer>
+                </Card>
+              );
+            }
+            return cards;
+          })()}
         </section>
       </Container>
     </div>

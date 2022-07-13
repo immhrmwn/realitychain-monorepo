@@ -38,3 +38,17 @@ export async function realityChainContractWithAccountId(
     ],
   });
 }
+
+export async function nep141ContractWithAccountId(
+  accountId: string,
+  keyStore: nearAPI.keyStores.KeyStore,
+  config: ContractConfig,
+): Promise<nearAPI.Contract> {
+  const connection = await createNearConnection(keyStore, config);
+  const account = await useAccount(connection, accountId);
+
+  return await new nearAPI.Contract(account, config.contractName, {
+    viewMethods: ['ft_balance_of'],
+    changeMethods: [],
+  });
+}

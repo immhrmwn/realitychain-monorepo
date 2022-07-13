@@ -5,6 +5,13 @@ export interface ContractConfig {
   appName: string;
   contractName: string;
 }
+export const testnetNep141Config: ContractConfig = {
+  networkId: 'testnet',
+  nodeUrl: 'https://rpc.testnet.near.org',
+  walletUrl: 'https://wallet.testnet.near.org',
+  appName: 'Reality Chain Testnet',
+  contractName: `bdf09d53af7df6266796b20e15e123acf491fe7a.factory.goerli.testnet`,
+};
 
 export const testnetConfig: ContractConfig = {
   networkId: 'testnet',

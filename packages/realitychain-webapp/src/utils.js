@@ -1,54 +1,39 @@
-import { connect, Contract, keyStores, WalletConnection } from "near-api-js";
-import getConfig from "./config";
+import * as buffer from 'buffer';
 
-const nearConfig = getConfig(process.env.NODE_ENV || "development");
+import { InMemorySigner, keyStores, WalletConnection } from "near-api-js";
+import { createNearConnection, realityChainContractWithAccountId, nep141ContractWithAccountId } from "@realitychain/sdk";
+import { getConfig, getNep141Config } from "./config";
+
+const nearConfig = getConfig("development");
+const ftConfig = getNep141Config("development");
 
 // Initialize contract & set global variables
 export async function initContract() {
+  window.Buffer = buffer.Buffer;
+
   // Initialize connection to the NEAR testnet
-  const near = await connect(
-    Object.assign(
-      { deps: { keyStore: new keyStores.BrowserLocalStorageKeyStore() } },
-      nearConfig
-    )
-  );
+  const near = await createNearConnection(new keyStores.BrowserLocalStorageKeyStore(), nearConfig);
 
   // Initializing Wallet based Account. It can work with NEAR testnet wallet that
   // is hosted at https://wallet.testnet.near.org
   window.walletConnection = new WalletConnection(near);
 
+
   // Getting the Account ID. If still unauthorized, it's just empty string
   window.accountId = window.walletConnection.getAccountId();
 
   // Initializing our contract APIs by contract name and configuration
-  window.contract = await new Contract(
-    window.walletConnection.account(),
-    nearConfig.contractName,
-    {
-      // View methods are read only. They don't modify the state, but usually return some value.
-      viewMethods: [
-        "get_contract_owner",
-        "get_lands",
-        "get_lands_by_owner",
-        "get_land_by_id",
-        "get_land_metadata",
-      ],
-      // Change methods can modify the state. But you don't receive the returned value when called.
-      changeMethods: [
-        "nft_mint",
-        "nft_mint_and_approve",
-        "nft_buy",
-        "nft_set_series_non_mintable",
-        "set_transaction_fee",
-        "nft_transfer",
-        "nft_transfer_call",
-        "nft_transfer_payout",
-        "nft_burn",
-        "nft_create_series",
-        "nft_decrease_series_copies",
-        "set_treasury"
-      ],
-    }
+  window.contract = await realityChainContractWithAccountId(
+    window.accountId,
+    new keyStores.BrowserLocalStorageKeyStore(),
+    nearConfig
+  );
+
+  // Initializing fungible token contract APIs
+  window.ftContract = await nep141ContractWithAccountId(
+    window.accountId,
+    new keyStores.BrowserLocalStorageKeyStore(),
+    ftConfig
   );
 }
 
@@ -63,6 +48,12 @@ export function login() {
   // user's behalf.
   // This works by creating a new access key for the user's account and storing
   // the private key in localStorage.
+  window.Buffer = buffer.Buffer;
   console.log(nearConfig.contractName, 99);
-  window.walletConnection.requestSignIn(nearConfig.contractName);
+  window.walletConnection.requestSignIn({
+    contractId: 'agustinustheo.testnet',
+    methodNames: []
+  });
+  const signer = new InMemorySigner(new keyStores.BrowserLocalStorageKeyStore());
+  signer.createKey(window.accountId, 'testnet');
 }
