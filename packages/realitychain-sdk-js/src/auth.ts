@@ -1,7 +1,7 @@
-import * as nearAPI from 'near-api-js';
+import { InMemorySigner } from 'near-api-js';
 import { Base64 } from 'js-base64';
 
-export async function generateAuthToken(accountId: string, signer: nearAPI.InMemorySigner, networkId: string) {
+export async function generateAuthToken(accountId: string, signer: InMemorySigner, networkId: string) {
   const arr: any[] = new Array(accountId);
   for (let i = 0; i < accountId.length; i++) {
     arr[i] = accountId.charCodeAt(i);

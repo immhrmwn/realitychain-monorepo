@@ -1,4 +1,4 @@
-import * as nearAPI from 'near-api-js';
+import { Contract } from 'near-api-js';
 import { oneYoctoNear } from './constant';
 import {
   NftBuyDto,
@@ -10,7 +10,7 @@ import {
 } from './interfaces';
 
 export async function nftCreateSeries(
-  contract: nearAPI.Contract,
+  contract: Contract,
   args: NftCreateSeriesDto,
   gas: number = 300000000000000,
   amount: string = '7090000000000000000000',
@@ -23,7 +23,7 @@ export async function nftCreateSeries(
 }
 
 export async function nftSetSeriesNonMintable(
-  contract: nearAPI.Contract,
+  contract: Contract,
   args: TokenSeriesIdDto,
   gas: number = 300000000000000,
 ): Promise<TokenSeriesJson> {
@@ -35,7 +35,7 @@ export async function nftSetSeriesNonMintable(
 }
 
 export async function nftBuy(
-  contract: nearAPI.Contract,
+  contract: Contract,
   args: NftBuyDto,
   gas: number = 300000000000000,
   amount: string = '7090000000000000000000',
@@ -48,7 +48,7 @@ export async function nftBuy(
 }
 
 export async function nftMint(
-  contract: nearAPI.Contract,
+  contract: Contract,
   args: NftMintDto,
   gas: number = 300000000000000,
   amount: string = '7090000000000000000000',
@@ -61,7 +61,7 @@ export async function nftMint(
 }
 
 export async function nftDecreaseSeriesCopies(
-  contract: nearAPI.Contract,
+  contract: Contract,
   args: NftDecreaseSeriesCopiesDto,
   gas: number = 300000000000000,
 ): Promise<any> {
