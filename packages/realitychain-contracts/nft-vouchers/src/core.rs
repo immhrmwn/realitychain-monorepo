@@ -36,11 +36,12 @@ impl RealityParcelVouchersContract {
         Self {
             tokens: NonFungibleToken::new(
                 StorageKey::NonFungibleToken,
-                owner_id,
+                owner_id.clone(),
                 Some(StorageKey::TokenMetadata),
                 Some(StorageKey::Enumeration),
                 Some(StorageKey::Approval),
             ),
+            owner_id: owner_id.to_string(),
             token_series_by_id: UnorderedMap::new(StorageKey::TokenSeriesById),
             metadata: LazyOption::new(StorageKey::Metadata, Some(&metadata)),
             treasury_id: treasury_id.to_string(),
@@ -68,6 +69,7 @@ impl RealityParcelVouchersContract {
             tokens: prev.tokens,
             metadata: prev.metadata,
             token_series_by_id: prev.token_series_by_id,
+            owner_id: prev.owner_id,
             treasury_id: prev.treasury_id,
             transaction_fee: prev.transaction_fee,
             market_data_transaction_fee: MarketDataTransactionFee {

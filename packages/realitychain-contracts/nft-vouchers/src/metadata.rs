@@ -66,5 +66,5 @@ pub enum StorageKey {
 #[derive(Serialize, Deserialize)]
 #[serde(crate = "near_sdk::serde")]
 pub struct StakeParams {
-	pub token_series_id: String,
+    pub token_series_id: String,
 }
