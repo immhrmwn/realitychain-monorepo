@@ -17,7 +17,6 @@ use std::collections::HashMap;
 
 mod core;
 mod event;
-mod external;
 mod metadata;
 mod mint;
 pub use event::NearEvent;
@@ -152,6 +151,7 @@ fn to_sec(timestamp: Timestamp) -> TimestampSec {
     (timestamp / 10u64.pow(9)) as u32
 }
 
+#[cfg(all(test, not(target_arch = "wasm32")))]
 mod mock;
 
 #[cfg(all(test, not(target_arch = "wasm32")))]
@@ -616,7 +616,7 @@ mod tests {
             .predecessor_account_id(accounts(1))
             .attached_deposit(STORAGE_FOR_MINT)
             .build());
-            
+
         let token_id = contract.ft_stake_and_nft_mint(
             accounts(0).to_string(),
             (TOTAL_SUPPLY / 4).into(),
@@ -648,7 +648,7 @@ mod tests {
             .predecessor_account_id(accounts(1))
             .attached_deposit(STORAGE_FOR_MINT)
             .build());
-            
+
         let token_id = contract.ft_stake_and_nft_mint(
             accounts(0).to_string(),
             (TOTAL_SUPPLY / 4).into(),

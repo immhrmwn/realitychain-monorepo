@@ -14,7 +14,6 @@ pub trait NonFungibleTokenReceiver {
 
 #[ext_contract(ext_ft)]
 trait FungibleToken {
-    // change methods
     fn ft_transfer(&mut self, receiver_id: AccountId, amount: U128, memo: Option<String>);
 }
 
@@ -33,7 +32,7 @@ impl RealityParcelVouchersContract {
             receiver_id,
             amount,
             None,
-            &env::current_account_id().to_string(),
+            &env::current_account_id(),
             0, // amount of yoctoNEAR to attach
             GAS_FOR_CALLBACK,
         );
@@ -50,7 +49,7 @@ impl RealityParcelVouchersContract {
 
         refund_deposit(env::storage_usage() - initial_storage_usage, 0);
 
-        NearEvent::log_nft_mint(sender_id.to_string(), vec![token_id.clone()], None);
+        NearEvent::log_nft_mint(sender_id, vec![token_id.clone()], None);
 
         token_id
     }
