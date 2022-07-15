@@ -1,6 +1,6 @@
 import { keyStores } from 'near-api-js';
 import { testnetConfig } from '../src/constant';
-import { realityChainContractWithAccountId } from '../src/near-api';
+import { parcelsContractWithAccountId } from '../src/near-api';
 import { NftCreateSeriesDto } from '../src/interfaces';
 import { nftCreateSeries } from '../src/change-methods';
 
@@ -8,7 +8,7 @@ const main = async () => {
   try {
     const accountId = 'agustinustheo.testnet';
     const keyStore = new keyStores.UnencryptedFileSystemKeyStore(`${process.env.HOME}/.near-credentials/`);
-    const contract: any = await realityChainContractWithAccountId(accountId, keyStore, testnetConfig);
+    const contract: any = await parcelsContractWithAccountId(accountId, keyStore, testnetConfig);
 
     await contract.new_default_meta({
       args: {

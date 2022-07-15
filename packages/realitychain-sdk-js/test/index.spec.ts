@@ -1,6 +1,6 @@
 import { keyStores } from 'near-api-js';
 import { testnetConfig } from '../src/constant';
-import { realityChainContractWithAccountId } from '../src/near-api';
+import { parcelsContractWithAccountId } from '../src/near-api';
 import {
   nftBuy,
   nftCreateSeries,
@@ -35,7 +35,7 @@ describe('Contract Tests', () => {
   it('nft create series should return', async () => {
     // Arrange
     const keyStore = new keyStores.UnencryptedFileSystemKeyStore(`${process.env.HOME}/.near-credentials/`);
-    const contract: any = await realityChainContractWithAccountId(accountId, keyStore, testnetConfig);
+    const contract: any = await parcelsContractWithAccountId(accountId, keyStore, testnetConfig);
 
     // Act
     const ret = await nftCreateSeries(contract, nftCreateSeriesParams);
@@ -50,7 +50,7 @@ describe('Contract Tests', () => {
   it('nft get series single should return', async () => {
     // Arrange
     const keyStore = new keyStores.UnencryptedFileSystemKeyStore(`${process.env.HOME}/.near-credentials/`);
-    const contract: any = await realityChainContractWithAccountId(accountId, keyStore, testnetConfig);
+    const contract: any = await parcelsContractWithAccountId(accountId, keyStore, testnetConfig);
 
     // Act
     const ret = await nftGetSeriesSingle(contract, '2');
@@ -65,7 +65,7 @@ describe('Contract Tests', () => {
   it('nft buy should return', async () => {
     // Arrange
     const keyStore = new keyStores.UnencryptedFileSystemKeyStore(`${process.env.HOME}/.near-credentials/`);
-    const contract: any = await realityChainContractWithAccountId(accountId, keyStore, testnetConfig);
+    const contract: any = await parcelsContractWithAccountId(accountId, keyStore, testnetConfig);
     const ncs = await nftCreateSeries(contract, nftCreateSeriesWithPriceParams);
 
     // Act
@@ -83,7 +83,7 @@ describe('Contract Tests', () => {
   it('nft mint should return', async () => {
     // Arrange
     const keyStore = new keyStores.UnencryptedFileSystemKeyStore(`${process.env.HOME}/.near-credentials/`);
-    const contract: any = await realityChainContractWithAccountId(accountId, keyStore, testnetConfig);
+    const contract: any = await parcelsContractWithAccountId(accountId, keyStore, testnetConfig);
     const ncs = await nftCreateSeries(contract, nftCreateSeriesParams);
 
     // Act
@@ -101,7 +101,7 @@ describe('Contract Tests', () => {
   it('nft mint should throw non mintable', async () => {
     // Arrange
     const keyStore = new keyStores.UnencryptedFileSystemKeyStore(`${process.env.HOME}/.near-credentials/`);
-    const contract: any = await realityChainContractWithAccountId(accountId, keyStore, testnetConfig);
+    const contract: any = await parcelsContractWithAccountId(accountId, keyStore, testnetConfig);
     const ncs = await nftCreateSeries(contract, nullNftCreateSeriesParams);
 
     // Act
@@ -114,7 +114,7 @@ describe('Contract Tests', () => {
   it('nft mint should throw', async () => {
     // Arrange
     const keyStore = new keyStores.UnencryptedFileSystemKeyStore(`${process.env.HOME}/.near-credentials/`);
-    const contract: any = await realityChainContractWithAccountId(accountId, keyStore, testnetConfig);
+    const contract: any = await parcelsContractWithAccountId(accountId, keyStore, testnetConfig);
     const ncs = await nftCreateSeries(contract, oneNftCreateSeriesParams);
 
     // Act
@@ -127,7 +127,7 @@ describe('Contract Tests', () => {
   it('nft decrease series copies should return', async () => {
     // Arrange
     const keyStore = new keyStores.UnencryptedFileSystemKeyStore(`${process.env.HOME}/.near-credentials/`);
-    const contract: any = await realityChainContractWithAccountId(accountId, keyStore, testnetConfig);
+    const contract: any = await parcelsContractWithAccountId(accountId, keyStore, testnetConfig);
     const ncs = await nftCreateSeries(contract, nftCreateSeriesParams);
 
     const ret = await nftMint(contract, createNftMintParams(ncs.token_series_id));
@@ -148,7 +148,7 @@ describe('Contract Tests', () => {
   it('nft decrease series copies should throw', async () => {
     // Arrange
     const keyStore = new keyStores.UnencryptedFileSystemKeyStore(`${process.env.HOME}/.near-credentials/`);
-    const contract: any = await realityChainContractWithAccountId(accountId, keyStore, testnetConfig);
+    const contract: any = await parcelsContractWithAccountId(accountId, keyStore, testnetConfig);
     const ncs = await nftCreateSeries(contract, twoNftCreateSeriesParams);
 
     const ret = await nftMint(contract, createNftMintParams(ncs.token_series_id));

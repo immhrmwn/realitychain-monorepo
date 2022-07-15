@@ -5,7 +5,15 @@ export interface ContractConfig {
   appName: string;
   contractName: string;
 }
-export const testnetNep141Config: ContractConfig = {
+
+// tslint:disable-next-line
+export interface Nep141Config extends ContractConfig {}
+// tslint:disable-next-line
+export interface RcParcelsConfig extends ContractConfig {}
+// tslint:disable-next-line
+export interface RcVouchersConfig extends ContractConfig {}
+
+export const testnetNep141Config: Nep141Config = {
   networkId: 'testnet',
   nodeUrl: 'https://rpc.testnet.near.org',
   walletUrl: 'https://wallet.testnet.near.org',
@@ -13,20 +21,36 @@ export const testnetNep141Config: ContractConfig = {
   contractName: `bdf09d53af7df6266796b20e15e123acf491fe7a.factory.goerli.testnet`,
 };
 
-export const testnetConfig: ContractConfig = {
+export const rcParcelsTestnetConfig: RcParcelsConfig = {
   networkId: 'testnet',
   nodeUrl: 'https://rpc.testnet.near.org',
   walletUrl: 'https://wallet.testnet.near.org',
   appName: 'Reality Chain Testnet',
-  contractName: `agustinustheo.testnet`,
+  contractName: `rc-parcels.testnet`,
 };
 
-export const mainnetConfig: ContractConfig = {
+export const rcParcelsMainnetConfig: RcParcelsConfig = {
   networkId: 'mainnet',
   nodeUrl: 'https://rpc.mainnet.near.org',
   walletUrl: 'https://wallet.mainnet.near.org',
   appName: 'Reality Chain Mainnet',
-  contractName: `agustinustheo.near`,
+  contractName: `rc-parcels.near`,
+};
+
+export const rcVouchersTestnetConfig: RcVouchersConfig = {
+  networkId: 'testnet',
+  nodeUrl: 'https://rpc.testnet.near.org',
+  walletUrl: 'https://wallet.testnet.near.org',
+  appName: 'Reality Chain Testnet',
+  contractName: `rc-vouchers.testnet`,
+};
+
+export const rcVouchersMainnetConfig: RcVouchersConfig = {
+  networkId: 'mainnet',
+  nodeUrl: 'https://rpc.mainnet.near.org',
+  walletUrl: 'https://wallet.mainnet.near.org',
+  appName: 'Reality Chain Mainnet',
+  contractName: `rc-vouchers.near`,
 };
 
 export const oneYoctoNear: string = '1';

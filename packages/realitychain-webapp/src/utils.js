@@ -1,7 +1,7 @@
 import * as buffer from 'buffer';
 
 import { InMemorySigner, keyStores, WalletConnection } from "near-api-js";
-import { createNearConnection, realityChainContractWithAccountId, nep141ContractWithAccountId } from "@realitychain/sdk";
+import { createNearConnection, parcelsContractWithAccountId, nep141ContractWithAccountId } from "@realitychain/sdk";
 import { getConfig, getNep141Config } from "./config";
 
 const nearConfig = getConfig("development");
@@ -23,7 +23,7 @@ export async function initContract() {
   window.accountId = window.walletConnection.getAccountId();
 
   // Initializing our contract APIs by contract name and configuration
-  window.contract = await realityChainContractWithAccountId(
+  window.contract = await parcelsContractWithAccountId(
     window.accountId,
     new keyStores.BrowserLocalStorageKeyStore(),
     nearConfig

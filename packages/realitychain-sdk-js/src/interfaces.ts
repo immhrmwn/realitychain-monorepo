@@ -1,3 +1,5 @@
+import { Contract } from 'near-api-js';
+
 export interface TokenMetadata {
   title: string | null;
   media: string | null;
@@ -55,4 +57,34 @@ export interface NftBuyDto {
 export interface NftMintDto {
   token_series_id: string;
   receiver_id: string;
+}
+
+export interface FtStakeAndNftMintDto {
+  receiver_id: string;
+  amount: string;
+  token_series_id: string;
+}
+
+export interface Nep141Contract extends Contract {
+  ft_balance_of;
+}
+
+export interface RcParcelsContract extends Contract {
+  nft_create_series;
+  nft_buy;
+  nft_mint;
+  nft_decrease_series_copies;
+  nft_set_series_non_mintable;
+  nft_set_series_price;
+  nft_get_series_single;
+  nft_token;
+}
+
+export interface RcVouchersContract extends Contract {
+  nft_create_series;
+  ft_stake_and_nft_mint;
+  nft_decrease_series_copies;
+  nft_set_series_price;
+  nft_get_series_single;
+  nft_token;
 }

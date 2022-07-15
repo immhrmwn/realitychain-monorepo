@@ -1,21 +1,23 @@
-import { Contract } from 'near-api-js';
 import { oneYoctoNear } from './constant';
 import {
+  FtStakeAndNftMintDto,
   NftBuyDto,
   NftCreateSeriesDto,
   NftDecreaseSeriesCopiesDto,
   NftMintDto,
+  RcParcelsContract,
+  RcVouchersContract,
   TokenSeriesIdDto,
   TokenSeriesJson,
 } from './interfaces';
 
 export async function nftCreateSeries(
-  contract: Contract,
+  contract: RcParcelsContract | RcVouchersContract,
   args: NftCreateSeriesDto,
   gas: number = 300000000000000,
   amount: string = '7090000000000000000000',
 ): Promise<TokenSeriesJson> {
-  return (await (contract as any).nft_create_series({
+  return (await contract.nft_create_series({
     args,
     gas,
     amount,
@@ -23,11 +25,11 @@ export async function nftCreateSeries(
 }
 
 export async function nftSetSeriesNonMintable(
-  contract: Contract,
+  contract: RcParcelsContract,
   args: TokenSeriesIdDto,
   gas: number = 300000000000000,
 ): Promise<TokenSeriesJson> {
-  return (await (contract as any).nft_set_series_non_mintable({
+  return (await contract.nft_set_series_non_mintable({
     args,
     gas,
     amount: oneYoctoNear,
@@ -35,12 +37,12 @@ export async function nftSetSeriesNonMintable(
 }
 
 export async function nftBuy(
-  contract: Contract,
+  contract: RcParcelsContract,
   args: NftBuyDto,
   gas: number = 300000000000000,
   amount: string = '7090000000000000000000',
 ): Promise<any> {
-  return (await (contract as any).nft_buy({
+  return (await contract.nft_buy({
     args,
     gas,
     amount,
@@ -48,12 +50,25 @@ export async function nftBuy(
 }
 
 export async function nftMint(
-  contract: Contract,
+  contract: RcParcelsContract,
   args: NftMintDto,
   gas: number = 300000000000000,
   amount: string = '7090000000000000000000',
 ): Promise<any> {
-  return (await (contract as any).nft_mint({
+  return (await contract.nft_mint({
+    args,
+    gas,
+    amount,
+  })) as any;
+}
+
+export async function ftStakeAndNftMint(
+  contract: RcVouchersContract,
+  args: FtStakeAndNftMintDto,
+  gas: number = 300000000000000,
+  amount: string = '7090000000000000000000',
+): Promise<any> {
+  return (await contract.ft_stake_and_nft_mint({
     args,
     gas,
     amount,
@@ -61,11 +76,11 @@ export async function nftMint(
 }
 
 export async function nftDecreaseSeriesCopies(
-  contract: Contract,
+  contract: RcParcelsContract | RcVouchersContract,
   args: NftDecreaseSeriesCopiesDto,
   gas: number = 300000000000000,
 ): Promise<any> {
-  return (await (contract as any).nft_decrease_series_copies({
+  return (await contract.nft_decrease_series_copies({
     args,
     gas,
     amount: oneYoctoNear,
