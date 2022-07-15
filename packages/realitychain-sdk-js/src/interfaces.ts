@@ -1,5 +1,14 @@
 import { Contract } from 'near-api-js';
 
+export interface ParcelMetadata {
+  token_metadata: TokenMetadata;
+  world_id: string;
+  land_id: string;
+  land_x: number;
+  land_y: number;
+  land_size: number;
+}
+
 export interface TokenMetadata {
   title: string | null;
   media: string | null;
@@ -27,7 +36,7 @@ export interface Royalty {
 }
 
 export interface NftCreateSeriesDto {
-  token_metadata: TokenMetadata;
+  metadata: ParcelMetadata;
   price: any;
   royalty: Royalty;
 }

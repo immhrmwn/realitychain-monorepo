@@ -11,15 +11,15 @@ const Parcel = () => {
 
   const handleMintingAll = async() => {
     for(let i = 1; i <= 4; i++) {
-      await nftMint(window.contract, {
+      await nftMint(window.parcelsContract, {
         token_series_id: `${i}`,
-        receiver_id: window.contract.account.accountId
+        receiver_id: window.parcelsContract.account.accountId
       });
     }
   };
   
   const handleMinting = async (data) => {
-    await window.contract.nft_mint({
+    await window.parcelsContract.nft_mint({
       args: {
         token_series_id: `${data}`,
         receiver_id: window.accountId

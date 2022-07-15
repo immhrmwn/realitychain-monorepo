@@ -1,5 +1,5 @@
 import { keyStores } from 'near-api-js';
-import { testnetConfig } from '../src/constant';
+import { rcParcelsTestnetConfig } from '../src/constant';
 import { parcelsContractWithAccountId } from '../src/near-api';
 import {
   nftBuy,
@@ -35,37 +35,37 @@ describe('Contract Tests', () => {
   it('nft create series should return', async () => {
     // Arrange
     const keyStore = new keyStores.UnencryptedFileSystemKeyStore(`${process.env.HOME}/.near-credentials/`);
-    const contract: any = await parcelsContractWithAccountId(accountId, keyStore, testnetConfig);
+    const contract: any = await parcelsContractWithAccountId(accountId, keyStore, rcParcelsTestnetConfig);
 
     // Act
     const ret = await nftCreateSeries(contract, nftCreateSeriesParams);
 
     // Assert
-    expect(ret.metadata.title).toEqual(nftCreateSeriesParams.token_metadata.title);
-    expect(ret.metadata.media).toEqual(nftCreateSeriesParams.token_metadata.media);
-    expect(ret.metadata.reference).toEqual(nftCreateSeriesParams.token_metadata.reference);
+    expect(ret.metadata.title).toEqual(nftCreateSeriesParams.metadata.token_metadata.title);
+    expect(ret.metadata.media).toEqual(nftCreateSeriesParams.metadata.token_metadata.media);
+    expect(ret.metadata.reference).toEqual(nftCreateSeriesParams.metadata.token_metadata.reference);
     expect(ret.royalty).toEqual(nftCreateSeriesParams.royalty);
   }, 60000);
 
   it('nft get series single should return', async () => {
     // Arrange
     const keyStore = new keyStores.UnencryptedFileSystemKeyStore(`${process.env.HOME}/.near-credentials/`);
-    const contract: any = await parcelsContractWithAccountId(accountId, keyStore, testnetConfig);
+    const contract: any = await parcelsContractWithAccountId(accountId, keyStore, rcParcelsTestnetConfig);
 
     // Act
     const ret = await nftGetSeriesSingle(contract, '2');
 
     // Assert
-    expect(ret.metadata.title).toEqual(nftCreateSeriesParams.token_metadata.title);
-    expect(ret.metadata.media).toEqual(nftCreateSeriesParams.token_metadata.media);
-    expect(ret.metadata.reference).toEqual(nftCreateSeriesParams.token_metadata.reference);
+    expect(ret.metadata.title).toEqual(nftCreateSeriesParams.metadata.token_metadata.title);
+    expect(ret.metadata.media).toEqual(nftCreateSeriesParams.metadata.token_metadata.media);
+    expect(ret.metadata.reference).toEqual(nftCreateSeriesParams.metadata.token_metadata.reference);
     expect(ret.royalty).toEqual(nftCreateSeriesParams.royalty);
   }, 60000);
 
   it('nft buy should return', async () => {
     // Arrange
     const keyStore = new keyStores.UnencryptedFileSystemKeyStore(`${process.env.HOME}/.near-credentials/`);
-    const contract: any = await parcelsContractWithAccountId(accountId, keyStore, testnetConfig);
+    const contract: any = await parcelsContractWithAccountId(accountId, keyStore, rcParcelsTestnetConfig);
     const ncs = await nftCreateSeries(contract, nftCreateSeriesWithPriceParams);
 
     // Act
@@ -75,15 +75,15 @@ describe('Contract Tests', () => {
     // Assert
     expect(ret).toEqual(`${ncs.token_series_id}:1`);
     expect(token.token_id).toEqual(ret);
-    expect(token.metadata.title.includes(nftCreateSeriesWithPriceParams.token_metadata.title)).toBeTruthy();
-    expect(token.metadata.media).toEqual(nftCreateSeriesWithPriceParams.token_metadata.media);
-    expect(token.metadata.reference).toEqual(nftCreateSeriesWithPriceParams.token_metadata.reference);
+    expect(token.metadata.title.includes(nftCreateSeriesWithPriceParams.metadata.token_metadata.title)).toBeTruthy();
+    expect(token.metadata.media).toEqual(nftCreateSeriesWithPriceParams.metadata.token_metadata.media);
+    expect(token.metadata.reference).toEqual(nftCreateSeriesWithPriceParams.metadata.token_metadata.reference);
   }, 60000);
 
   it('nft mint should return', async () => {
     // Arrange
     const keyStore = new keyStores.UnencryptedFileSystemKeyStore(`${process.env.HOME}/.near-credentials/`);
-    const contract: any = await parcelsContractWithAccountId(accountId, keyStore, testnetConfig);
+    const contract: any = await parcelsContractWithAccountId(accountId, keyStore, rcParcelsTestnetConfig);
     const ncs = await nftCreateSeries(contract, nftCreateSeriesParams);
 
     // Act
@@ -93,15 +93,15 @@ describe('Contract Tests', () => {
     // Assert
     expect(ret).toEqual(`${ncs.token_series_id}:1`);
     expect(token.token_id).toEqual(ret);
-    expect(token.metadata.title.includes(nftCreateSeriesParams.token_metadata.title)).toBeTruthy();
-    expect(token.metadata.media).toEqual(nftCreateSeriesParams.token_metadata.media);
-    expect(token.metadata.reference).toEqual(nftCreateSeriesParams.token_metadata.reference);
+    expect(token.metadata.title.includes(nftCreateSeriesParams.metadata.token_metadata.title)).toBeTruthy();
+    expect(token.metadata.media).toEqual(nftCreateSeriesParams.metadata.token_metadata.media);
+    expect(token.metadata.reference).toEqual(nftCreateSeriesParams.metadata.token_metadata.reference);
   }, 60000);
 
   it('nft mint should throw non mintable', async () => {
     // Arrange
     const keyStore = new keyStores.UnencryptedFileSystemKeyStore(`${process.env.HOME}/.near-credentials/`);
-    const contract: any = await parcelsContractWithAccountId(accountId, keyStore, testnetConfig);
+    const contract: any = await parcelsContractWithAccountId(accountId, keyStore, rcParcelsTestnetConfig);
     const ncs = await nftCreateSeries(contract, nullNftCreateSeriesParams);
 
     // Act
@@ -114,7 +114,7 @@ describe('Contract Tests', () => {
   it('nft mint should throw', async () => {
     // Arrange
     const keyStore = new keyStores.UnencryptedFileSystemKeyStore(`${process.env.HOME}/.near-credentials/`);
-    const contract: any = await parcelsContractWithAccountId(accountId, keyStore, testnetConfig);
+    const contract: any = await parcelsContractWithAccountId(accountId, keyStore, rcParcelsTestnetConfig);
     const ncs = await nftCreateSeries(contract, oneNftCreateSeriesParams);
 
     // Act
@@ -127,7 +127,7 @@ describe('Contract Tests', () => {
   it('nft decrease series copies should return', async () => {
     // Arrange
     const keyStore = new keyStores.UnencryptedFileSystemKeyStore(`${process.env.HOME}/.near-credentials/`);
-    const contract: any = await parcelsContractWithAccountId(accountId, keyStore, testnetConfig);
+    const contract: any = await parcelsContractWithAccountId(accountId, keyStore, rcParcelsTestnetConfig);
     const ncs = await nftCreateSeries(contract, nftCreateSeriesParams);
 
     const ret = await nftMint(contract, createNftMintParams(ncs.token_series_id));
@@ -135,9 +135,9 @@ describe('Contract Tests', () => {
 
     expect(ret).toEqual(`${ncs.token_series_id}:1`);
     expect(token.token_id).toEqual(ret);
-    expect(token.metadata.title.includes(nftCreateSeriesParams.token_metadata.title)).toBeTruthy();
-    expect(token.metadata.media).toEqual(nftCreateSeriesParams.token_metadata.media);
-    expect(token.metadata.reference).toEqual(nftCreateSeriesParams.token_metadata.reference);
+    expect(token.metadata.title.includes(nftCreateSeriesParams.metadata.token_metadata.title)).toBeTruthy();
+    expect(token.metadata.media).toEqual(nftCreateSeriesParams.metadata.token_metadata.media);
+    expect(token.metadata.reference).toEqual(nftCreateSeriesParams.metadata.token_metadata.reference);
 
     await nftMint(contract, createNftMintParams(ncs.token_series_id));
 
@@ -148,7 +148,7 @@ describe('Contract Tests', () => {
   it('nft decrease series copies should throw', async () => {
     // Arrange
     const keyStore = new keyStores.UnencryptedFileSystemKeyStore(`${process.env.HOME}/.near-credentials/`);
-    const contract: any = await parcelsContractWithAccountId(accountId, keyStore, testnetConfig);
+    const contract: any = await parcelsContractWithAccountId(accountId, keyStore, rcParcelsTestnetConfig);
     const ncs = await nftCreateSeries(contract, twoNftCreateSeriesParams);
 
     const ret = await nftMint(contract, createNftMintParams(ncs.token_series_id));
@@ -156,9 +156,9 @@ describe('Contract Tests', () => {
 
     expect(ret).toEqual(`${ncs.token_series_id}:1`);
     expect(token.token_id).toEqual(ret);
-    expect(token.metadata.title.includes(twoNftCreateSeriesParams.token_metadata.title)).toBeTruthy();
-    expect(token.metadata.media).toEqual(twoNftCreateSeriesParams.token_metadata.media);
-    expect(token.metadata.reference).toEqual(twoNftCreateSeriesParams.token_metadata.reference);
+    expect(token.metadata.title.includes(twoNftCreateSeriesParams.metadata.token_metadata.title)).toBeTruthy();
+    expect(token.metadata.media).toEqual(twoNftCreateSeriesParams.metadata.token_metadata.media);
+    expect(token.metadata.reference).toEqual(twoNftCreateSeriesParams.metadata.token_metadata.reference);
 
     await nftMint(contract, createNftMintParams(ncs.token_series_id));
 

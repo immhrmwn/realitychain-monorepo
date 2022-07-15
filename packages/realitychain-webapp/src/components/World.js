@@ -13,6 +13,7 @@ import { ReactComponent as NearIcon } from "../assets/wallets/near.svg";
 import { ReactComponent as EthereumIcon } from "../assets/wallets/ethereum.svg";
 import { ReactComponent as PolygonIcon } from "../assets/wallets/polygon.svg";
 import { useNavigate } from "react-router-dom";
+import { ftStakeAndNftMint } from "@realitychain/sdk";
 
 export const WorldComponent = ({ balance }) => {
   const [blockchain, setBlockchain] = React.useState(null);
@@ -37,11 +38,11 @@ export const WorldComponent = ({ balance }) => {
   const price = () => {
     switch (size) {
       case "small":
-        return "100";
+        return `${1 * (10 ** 13)}`;
       case "medium":
-        return "500";
+        return `${3 * (10 ** 13)}`;
       case "large":
-        return "1000";
+        return `${5 * (10 ** 13)}`;
       default:
         return "0";
     }
@@ -60,7 +61,7 @@ export const WorldComponent = ({ balance }) => {
     }
   };
 
-  const handleStake = () => {
+  const handleStake = async () => {
     // TODO: make sure the data payload is required
     const payload = {
       blockchain,
@@ -70,9 +71,11 @@ export const WorldComponent = ({ balance }) => {
       id: window.accountId,
     };
     if (balance >= value) {
-      // TODO: POST DATA STAKING
-      console.log(payload);
-      // TODO: callback if needed e.g. success toaster or navigate
+      await ftStakeAndNftMint({
+        receiver_id: 'rc-vouchers.testnet',
+        amount: size,
+        token_series_id: '1'
+      });
       navigate("/minting");
     } else {
       // TODO: Error handling

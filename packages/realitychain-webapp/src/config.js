@@ -1,13 +1,28 @@
-import { testnetConfig, mainnetConfig, testnetNep141Config } from "@realitychain/sdk";
+import { rcParcelsTestnetConfig, rcParcelsMainnetConfig, rcVouchersTestnetConfig, rcVouchersMainnetConfig, testnetNep141Config } from "@realitychain/sdk";
 
-export function getConfig(env) {
+export function getParcelsConfig(env) {
   switch (env) {
     case "production":
     case "mainnet":
-      return mainnetConfig;
+      return rcParcelsMainnetConfig;
     case "development":
     case "testnet":
-      return testnetConfig;
+      return rcParcelsTestnetConfig;
+    default:
+      throw Error(
+        `Unconfigured environment '${env}'. Can be configured in src/config.js.`
+      );
+  }
+}
+
+export function getVouchersConfig(env) {
+  switch (env) {
+    case "production":
+    case "mainnet":
+      return rcVouchersMainnetConfig;
+    case "development":
+    case "testnet":
+      return rcVouchersTestnetConfig;
     default:
       throw Error(
         `Unconfigured environment '${env}'. Can be configured in src/config.js.`
