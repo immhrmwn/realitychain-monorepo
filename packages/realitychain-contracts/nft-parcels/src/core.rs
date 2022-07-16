@@ -278,7 +278,7 @@ impl RealityParcelsContract {
         TokenSeriesJson {
             token_series_id,
             metadata: token_metadata,
-            parcel_metadata: parcel_metadata,
+            parcel_metadata,
             creator_id: caller_id,
             royalty: royalty_res,
             transaction_fee: Some(current_transaction_fee.into()),

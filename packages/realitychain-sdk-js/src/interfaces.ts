@@ -1,7 +1,6 @@
-import { Contract } from 'near-api-js';
+import { Account, Contract } from 'near-api-js';
 
 export interface ParcelMetadata {
-  token_metadata: TokenMetadata;
   world_id: string;
   land_id: string;
   land_x: number;
@@ -35,14 +34,16 @@ export interface Royalty {
   [x: string]: number;
 }
 
-export interface NftCreateSeriesDto {
-  metadata: ParcelMetadata;
+export interface NftCreateParcelSeriesDto {
+  parcel_metadata: ParcelMetadata;
+  token_metadata: TokenMetadata;
   price: any;
   royalty: Royalty;
 }
 
 export interface TokenSeriesJson {
   token_series_id: string;
+  parcel_metadata: ParcelMetadata;
   metadata: TokenMetadata;
   creator_id: string;
   royalty: Royalty;
@@ -79,7 +80,12 @@ export interface Nep141Contract extends Contract {
 }
 
 export interface RcParcelsContract extends Contract {
-  nft_create_series;
+  new_default_meta;
+  nft_create_series: (params: {
+    args: NftCreateParcelSeriesDto;
+    gas: number;
+    amount: string;
+  }) => Promise<TokenSeriesJson>;
   nft_buy;
   nft_mint;
   nft_decrease_series_copies;
@@ -90,6 +96,7 @@ export interface RcParcelsContract extends Contract {
 }
 
 export interface RcVouchersContract extends Contract {
+  new_default_meta;
   nft_create_series;
   ft_stake_and_nft_mint;
   nft_decrease_series_copies;

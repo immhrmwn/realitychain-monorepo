@@ -2,7 +2,7 @@ import { oneYoctoNear } from './constant';
 import {
   FtStakeAndNftMintDto,
   NftBuyDto,
-  NftCreateSeriesDto,
+  NftCreateParcelSeriesDto,
   NftDecreaseSeriesCopiesDto,
   NftMintDto,
   RcParcelsContract,
@@ -11,9 +11,22 @@ import {
   TokenSeriesJson,
 } from './interfaces';
 
-export async function nftCreateSeries(
-  contract: RcParcelsContract | RcVouchersContract,
-  args: NftCreateSeriesDto,
+export async function nftCreateParcelSeries(
+  contract: RcParcelsContract,
+  args: NftCreateParcelSeriesDto,
+  gas: number = 300000000000000,
+  amount: string = '7090000000000000000000',
+): Promise<TokenSeriesJson> {
+  return (await contract.nft_create_series({
+    args,
+    gas,
+    amount,
+  })) as TokenSeriesJson;
+}
+
+export async function nftCreateVoucherSeries(
+  contract: RcVouchersContract,
+  args: NftCreateParcelSeriesDto,
   gas: number = 300000000000000,
   amount: string = '7090000000000000000000',
 ): Promise<TokenSeriesJson> {
