@@ -167,7 +167,8 @@ impl RealityParcelsContract {
     pub fn nft_create_series(
         &mut self,
         creator_id: Option<ValidAccountId>,
-        token_metadata: ParcelMetadata,
+        parcel_metadata: ParcelMetadata,
+        token_metadata: TokenMetadata,
         price: Option<U128>,
         royalty: Option<HashMap<AccountId, u32>>,
     ) -> TokenSeriesJson {
@@ -189,7 +190,7 @@ impl RealityParcelsContract {
             "RealityChain: duplicate token_series_id"
         );
 
-        let title = token_metadata.token_metadata.title.clone();
+        let title = token_metadata.title.clone();
         assert!(
             title.is_some(),
             "RealityChain: token_metadata.title is required"
@@ -234,6 +235,7 @@ impl RealityParcelsContract {
         self.token_series_by_id.insert(
             &token_series_id,
             &TokenSeries {
+                parcel_metadata: parcel_metadata.clone(),
                 metadata: token_metadata.clone(),
                 creator_id: caller_id.to_string(),
                 tokens: UnorderedSet::new(
@@ -276,6 +278,7 @@ impl RealityParcelsContract {
         TokenSeriesJson {
             token_series_id,
             metadata: token_metadata,
+            parcel_metadata: parcel_metadata,
             creator_id: caller_id,
             royalty: royalty_res,
             transaction_fee: Some(current_transaction_fee.into()),
@@ -301,7 +304,7 @@ impl RealityParcelsContract {
         );
 
         let minted_copies = token_series.tokens.len();
-        let copies = token_series.metadata.token_metadata.copies.unwrap();
+        let copies = token_series.metadata.copies.unwrap();
 
         assert!(
             (copies - decrease_copies.0) >= minted_copies,
@@ -316,7 +319,7 @@ impl RealityParcelsContract {
             false
         };
 
-        token_series.metadata.token_metadata.copies = Some(copies - decrease_copies.0);
+        token_series.metadata.copies = Some(copies - decrease_copies.0);
 
         self.token_series_by_id
             .insert(&token_series_id, &token_series);
@@ -325,14 +328,14 @@ impl RealityParcelsContract {
                 "type": "nft_decrease_series_copies",
                 "params": {
                     "token_series_id": token_series_id,
-                    "copies": U64::from(token_series.metadata.token_metadata.copies.unwrap()),
+                    "copies": U64::from(token_series.metadata.copies.unwrap()),
                     "is_non_mintable": is_non_mintable,
                 }
             })
             .to_string()
             .as_bytes(),
         );
-        U64::from(token_series.metadata.token_metadata.copies.unwrap())
+        U64::from(token_series.metadata.copies.unwrap())
     }
 
     #[payable]
@@ -435,6 +438,7 @@ impl RealityParcelsContract {
         TokenSeriesJson {
             token_series_id,
             metadata: token_series.metadata,
+            parcel_metadata: token_series.parcel_metadata,
             creator_id: token_series.creator_id,
             royalty: token_series.royalty,
             transaction_fee: Some(current_transaction_fee.into()),
@@ -470,6 +474,7 @@ impl RealityParcelsContract {
             .map(|(token_series_id, token_series)| TokenSeriesJson {
                 token_series_id,
                 metadata: token_series.metadata,
+                parcel_metadata: token_series.parcel_metadata,
                 creator_id: token_series.creator_id,
                 royalty: token_series.royalty,
                 transaction_fee: None,
@@ -540,15 +545,15 @@ impl RealityParcelsContract {
 
         token_metadata.title = Some(format!(
             "{}{}{}",
-            series_metadata.token_metadata.title.unwrap(),
+            series_metadata.title.unwrap(),
             TITLE_DELIMETER,
             token_id_iter.next().unwrap()
         ));
 
-        token_metadata.reference = series_metadata.token_metadata.reference;
-        token_metadata.media = series_metadata.token_metadata.media;
-        token_metadata.copies = series_metadata.token_metadata.copies;
-        token_metadata.extra = series_metadata.token_metadata.extra;
+        token_metadata.reference = series_metadata.reference;
+        token_metadata.media = series_metadata.media;
+        token_metadata.copies = series_metadata.copies;
+        token_metadata.extra = series_metadata.extra;
 
         Some(Token {
             token_id,

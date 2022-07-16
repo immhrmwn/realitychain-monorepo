@@ -18,7 +18,6 @@ pub struct Payout {
 
 #[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize, Clone)]
 pub struct ParcelMetadata {
-    pub token_metadata: TokenMetadata,
     pub world_id: String,
     pub land_id: String,
     pub land_x: u32,
@@ -28,19 +27,21 @@ pub struct ParcelMetadata {
 
 #[derive(BorshDeserialize, BorshSerialize)]
 pub struct TokenSeries {
-    pub metadata: ParcelMetadata,
+    pub metadata: TokenMetadata,
     pub creator_id: AccountId,
     pub tokens: UnorderedSet<TokenId>,
     pub price: Option<Balance>,
     pub is_mintable: bool,
     pub royalty: HashMap<AccountId, u32>,
+    pub parcel_metadata: ParcelMetadata,
 }
 
 #[derive(Serialize, Deserialize)]
 #[serde(crate = "near_sdk::serde")]
 pub struct TokenSeriesJson {
     pub token_series_id: TokenSeriesId,
-    pub metadata: ParcelMetadata,
+    pub metadata: TokenMetadata,
+    pub parcel_metadata: ParcelMetadata,
     pub creator_id: AccountId,
     pub royalty: HashMap<AccountId, u32>,
     pub transaction_fee: Option<U128>,
