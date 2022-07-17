@@ -2,13 +2,8 @@ import { RcParcelsContract, RcVouchersContract, TokenSeriesJson } from './interf
 
 export async function nftGetSeries(
   contract: RcParcelsContract | RcVouchersContract,
-  from_index: string,
-  limit: string,
 ): Promise<TokenSeriesJson[]> {
-  return (await contract.nft_get_series({
-    from_index,
-    limit,
-  })) as TokenSeriesJson[];
+  return (await contract.nft_get_series()) as TokenSeriesJson[];
 }
 
 export async function nftGetSeriesSingle(

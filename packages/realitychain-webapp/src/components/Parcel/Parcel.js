@@ -37,17 +37,7 @@ const Parcel = () => {
             Minting All
           </Button>
         </div>
-        <section
-          style={{
-            display: "flex",
-            gap: 16,
-            flexWrap: "wrap",
-            justifyContent: "flex-start",
-            marginTop: 20,
-          }}
-        >
-          <ParcelListComponent />
-        </section>
+        <ParcelListComponent />
       </Container>
     </div>
   );

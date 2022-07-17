@@ -20,7 +20,7 @@ export const ParcelListComponent = () => {
 
   const getParcelSeries = async () => {
     try {
-      const response = await nftGetSeries(window.parcelsContract, "1", "4");
+      const response = await nftGetSeries(window.parcelsContract);
       console.log(response);
 
       setData(response);
@@ -30,7 +30,15 @@ export const ParcelListComponent = () => {
   };
 
   return (
-    <div style={{ padding: 30 }}>
+    <section
+      style={{
+        display: "flex",
+        gap: 16,
+        flexWrap: "wrap",
+        justifyContent: "flex-start",
+        marginTop: 20,
+      }}
+    >
       {!!data.length &&
         data.map((nft, i) => (
           <>
@@ -110,6 +118,6 @@ export const ParcelListComponent = () => {
           </>
         ))}
       {!data.length && <div>Empty Component</div>}
-    </div>
+    </section>
   );
 };
