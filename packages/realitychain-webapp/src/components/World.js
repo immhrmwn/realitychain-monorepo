@@ -38,11 +38,11 @@ export const WorldComponent = ({ balance }) => {
   const price = () => {
     switch (size) {
       case "small":
-        return `${1 * (10 ** 13)}`;
+        return `${1 * 10 ** 13}`;
       case "medium":
-        return `${3 * (10 ** 13)}`;
+        return `${3 * 10 ** 13}`;
       case "large":
-        return `${5 * (10 ** 13)}`;
+        return `${5 * 10 ** 13}`;
       default:
         return "0";
     }
@@ -71,14 +71,11 @@ export const WorldComponent = ({ balance }) => {
       id: window.accountId,
     };
     if (balance >= value) {
-      await ftTransferCall(
-        window.ftContract,
-        {
-          receiver_id: 'rc-vouchers.testnet',
-          amount: '10000000000000',
-          msg: '{ "token_series_id": "1" }',
-        }
-      );
+      await ftTransferCall(window.ftContract, {
+        receiver_id: "rc-vouchers.testnet",
+        amount: "10000000000000",
+        msg: '{ "token_series_id": "1" }',
+      });
       navigate("/minting");
     } else {
       // TODO: Error handling

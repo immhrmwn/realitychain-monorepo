@@ -21,8 +21,12 @@
     "regenerator-runtime": "^0.13.9",
     "web-vitals": "^2.1.0"
   },
+  "devDependencies": {
+    "prettier": "^2.5.1"
+  },
   "scripts": {
     "start": "react-scripts start",
+    "format": "prettier --write \"(src|example|test)/**/*.js\"",
     "build": "SKIP_PREFLIGHT_CHECK=true react-scripts build",
     "prepare": "yarn build",
     "test": "react-scripts test",

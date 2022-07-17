@@ -1,5 +1,5 @@
-import * as buffer from 'buffer';
-import 'regenerator-runtime/runtime';
+import * as buffer from "buffer";
+import "regenerator-runtime/runtime";
 
 import React from "react";
 import { Container, Button } from "react-bootstrap";
@@ -9,11 +9,11 @@ import { nftMint } from "@realitychain/sdk";
 const Parcel = () => {
   window.Buffer = buffer.Buffer;
 
-  const handleMintingAll = async() => {
-    for(let i = 1; i <= 4; i++) {
+  const handleMintingAll = async () => {
+    for (let i = 1; i <= 4; i++) {
       await nftMint(window.parcelsContract, {
         token_series_id: `${i}`,
-        receiver_id: window.parcelsContract.account.accountId
+        receiver_id: window.parcelsContract.account.accountId,
       });
     }
   };

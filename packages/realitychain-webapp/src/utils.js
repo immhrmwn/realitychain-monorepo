@@ -1,7 +1,12 @@
-import * as buffer from 'buffer';
+import * as buffer from "buffer";
 
 import { InMemorySigner, keyStores, WalletConnection } from "near-api-js";
-import { createNearConnection, parcelsContractWithAccountId, nep141ContractWithAccountId, vouchersContractWithAccountId } from "@realitychain/sdk";
+import {
+  createNearConnection,
+  parcelsContractWithAccountId,
+  nep141ContractWithAccountId,
+  vouchersContractWithAccountId,
+} from "@realitychain/sdk";
 import { getParcelsConfig, getVouchersConfig, getNep141Config } from "./config";
 
 const parcelsConfig = getParcelsConfig("development");
@@ -13,12 +18,14 @@ export async function initContract() {
   window.Buffer = buffer.Buffer;
 
   // Initialize connection to the NEAR testnet
-  const near = await createNearConnection(new keyStores.BrowserLocalStorageKeyStore(), parcelsConfig);
+  const near = await createNearConnection(
+    new keyStores.BrowserLocalStorageKeyStore(),
+    parcelsConfig
+  );
 
   // Initializing Wallet based Account. It can work with NEAR testnet wallet that
   // is hosted at https://wallet.testnet.near.org
   window.walletConnection = new WalletConnection(near);
-
 
   // Getting the Account ID. If still unauthorized, it's just empty string
   window.accountId = window.walletConnection.getAccountId();
@@ -59,9 +66,11 @@ export function login() {
   window.Buffer = buffer.Buffer;
   console.log(parcelsConfig.contractName, 99);
   window.walletConnection.requestSignIn({
-    contractId: 'agustinustheo.testnet',
-    methodNames: []
+    contractId: "agustinustheo.testnet",
+    methodNames: [],
   });
-  const signer = new InMemorySigner(new keyStores.BrowserLocalStorageKeyStore());
-  signer.createKey(window.accountId, 'testnet');
+  const signer = new InMemorySigner(
+    new keyStores.BrowserLocalStorageKeyStore()
+  );
+  signer.createKey(window.accountId, "testnet");
 }

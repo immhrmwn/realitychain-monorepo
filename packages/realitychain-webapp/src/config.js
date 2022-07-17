@@ -1,4 +1,10 @@
-import { rcParcelsTestnetConfig, rcParcelsMainnetConfig, rcVouchersTestnetConfig, rcVouchersMainnetConfig, testnetNep141Config } from "@realitychain/sdk";
+import {
+  rcParcelsTestnetConfig,
+  rcParcelsMainnetConfig,
+  rcVouchersTestnetConfig,
+  rcVouchersMainnetConfig,
+  testnetNep141Config,
+} from "@realitychain/sdk";
 
 export function getParcelsConfig(env) {
   switch (env) {

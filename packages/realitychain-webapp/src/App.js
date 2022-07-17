@@ -1,4 +1,4 @@
-import 'regenerator-runtime/runtime';
+import "regenerator-runtime/runtime";
 
 import React from "react";
 import "./App.css";
@@ -23,7 +23,7 @@ function App() {
     window.ftContract
       .ft_balance_of({ account_id: window.accountId })
       .then((balance) => setBalance((balance / 10 ** 8).toFixed(2)))
-      .catch((err) => console.log(err))
+      .catch((err) => console.log(err));
   }, []);
 
   const handleOpenModal = () => {
