@@ -10,20 +10,13 @@ import {
 } from "react-bootstrap";
 import "./World.css";
 import { useNavigate } from "react-router-dom";
-import { nftCreateParcelSeries } from "@realitychain/sdk";
+import { nftCreateParcelSeries, nftCreateVoucherSeries } from "@realitychain/sdk";
 
 export const SeriesComponent = ({ balance }) => {
   const [value, setValue] = React.useState();
   const navigate = useNavigate();
 
-  const params = {
-    parcel_metadata: {
-      world_id: 'world_id',
-      land_id: 'land_id',
-      land_size: 0,
-      land_x: 0,
-      land_y: 0,
-    },
+  const voucherParams = {
     token_metadata: {
       title: 'Dark',
       media: 'bafybeifdbvb6yzajogbe4dbn3bgxoli3sp7ol7upfmu2givpvbwufydthu',
@@ -41,11 +34,22 @@ export const SeriesComponent = ({ balance }) => {
     price: null,
     royalty: {
       [window.accountId]: 1000,
+    }
+  };
+  const parcelParams = {
+    parcel_metadata: {
+      world_id: 'world_id',
+      land_id: 'land_id',
+      land_size: 0,
+      land_x: 0,
+      land_y: 0,
     },
+    ...voucherParams
   };
 
   const handleCreateSeries = async () => {
-    await nftCreateParcelSeries(window.parcelsContract, params);
+    await nftCreateParcelSeries(window.parcelsContract, parcelParams);
+    await nftCreateVoucherSeries(window.vouchersContract, voucherParams);
     navigate("/staking");
   };
 

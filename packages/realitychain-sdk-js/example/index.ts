@@ -1,6 +1,5 @@
 import { keyStores } from 'near-api-js';
 import {
-  ftStakeAndNftMint,
   nftCreateVoucherSeries,
   rcVouchersTestnetConfig,
   vouchersContractWithAccountId,
@@ -51,12 +50,6 @@ const main = async () => {
     // const ret = await nftCreateVoucherSeries(contract, formattedParams);
 
     // console.log(ret);
-
-    // const ret2 = await ftStakeAndNftMint(contract, {
-    //   receiver_id: 'rc-parcels.testnet',
-    //   amount: '10000000000000',
-    //   token_series_id: '1',
-    // });
 
     const ret = await ftContract.storage_deposit({
       args: {

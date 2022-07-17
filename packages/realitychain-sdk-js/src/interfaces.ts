@@ -1,5 +1,16 @@
 import { Account, Contract } from 'near-api-js';
 
+export interface StorageDepositDto {
+  account_id: string;
+  registration_only: string | null;
+}
+
+export interface FtTransferCallDto {
+  receiver_id: string;
+  amount: string;
+  msg: string;
+}
+
 export interface ParcelMetadata {
   world_id: string;
   land_id: string;
@@ -94,6 +105,7 @@ export interface RcParcelsContract extends Contract {
     gas: number;
     amount: string;
   }) => Promise<TokenSeriesJson>;
+  nft_get_series;
   nft_buy;
   nft_mint;
   nft_decrease_series_copies;
@@ -106,6 +118,7 @@ export interface RcParcelsContract extends Contract {
 export interface RcVouchersContract extends Contract {
   new_default_meta;
   nft_create_series;
+  nft_get_series;
   ft_stake_and_nft_mint;
   nft_decrease_series_copies;
   nft_set_series_price;
