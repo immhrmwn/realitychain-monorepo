@@ -1,6 +1,5 @@
 use crate::*;
 use near_sdk::{env, ext_contract, near_bindgen, AccountId};
-use std::str::FromStr;
 
 #[ext_contract(ext_approval_receiver)]
 pub trait NonFungibleTokenReceiver {
@@ -18,45 +17,9 @@ trait FungibleToken {
     fn ft_transfer(&mut self, receiver_id: AccountId, amount: U128, memo: Option<String>);
 }
 
-const GAS_FOR_CALLBACK: Gas = 5_000_000_000_000;
-
 #[near_bindgen]
 impl RealityParcelVouchersContract {
-    #[payable]
-    pub fn ft_stake_and_nft_mint(
-        &mut self,
-        receiver_id: AccountId,
-        amount: U128,
-        token_series_id: String,
-    ) -> TokenId {
-        ext_ft::ft_transfer(
-            receiver_id,
-            amount,
-            None,
-            &AccountId::from_str("unet.testnet").unwrap(),
-            1, // amount of yoctoNEAR to attach
-            GAS_FOR_CALLBACK,
-        );
-
-        let initial_storage_usage = env::storage_usage();
-        let sender_id = env::predecessor_account_id();
-
-        let _token_series = self
-            .token_series_by_id
-            .get(&token_series_id)
-            .expect("RealityChain: Token series not exist");
-
-        let token_id: TokenId = self.nft_mint_series(token_series_id, sender_id.to_string());
-
-        refund_deposit(env::storage_usage() - initial_storage_usage, 0);
-
-        NearEvent::log_nft_mint(sender_id, vec![token_id.clone()], None);
-
-        token_id
-    }
-
-    #[private]
-    fn nft_mint_series(
+    pub fn nft_mint_series(
         &mut self,
         token_series_id: TokenSeriesId,
         receiver_id: AccountId,
