@@ -61,6 +61,7 @@ export const Header = ({ onConnect, onLogout, balance }) => {
         </Navbar.Brand>
         <Nav className="me-auto">
           <Nav.Link onClick={() => navigate("/")}>Home</Nav.Link>
+          <Nav.Link onClick={() => navigate("/series")}>Series</Nav.Link>
           <Nav.Link onClick={() => navigate("/staking")}>Staking</Nav.Link>
           <Nav.Link onClick={() => navigate("/minting")}>
             Parcel Minting

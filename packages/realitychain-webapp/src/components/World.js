@@ -71,11 +71,14 @@ export const WorldComponent = ({ balance }) => {
       id: window.accountId,
     };
     if (balance >= value) {
-      await ftStakeAndNftMint({
-        receiver_id: 'rc-vouchers.testnet',
-        amount: size,
-        token_series_id: '1'
-      });
+      await ftStakeAndNftMint(
+        window.vouchersContract,
+        {
+          receiver_id: 'rc-vouchers.testnet',
+          amount: size,
+          token_series_id: '1'
+        }
+      );
       navigate("/minting");
     } else {
       // TODO: Error handling

@@ -5,6 +5,7 @@ import "./App.css";
 import { Header } from "./components/Header";
 import { ConnectWallet } from "./components/ConnectWallet";
 import { HomePage } from "./components/HomePage";
+import { SeriesComponent } from "./components/Series";
 import { WorldComponent } from "./components/World";
 import { login, logout } from "./utils";
 import ParcelComponent from "./components/Parcel/Parcel";
@@ -56,6 +57,10 @@ function App() {
         />
         <Routes>
           <Route path="/minting" element={<ParcelComponent />} />
+          <Route
+            path="/series"
+            element={<SeriesComponent balance={balance} />}
+          />
           <Route
             path="/staking"
             element={<WorldComponent balance={balance} />}
