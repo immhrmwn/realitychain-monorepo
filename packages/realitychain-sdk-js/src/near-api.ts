@@ -61,6 +61,6 @@ export async function nep141ContractWithAccountId(
 
   return (await new Contract(account, config.contractName, {
     viewMethods: ['ft_balance_of'],
-    changeMethods: [],
+    changeMethods: ['ft_transfer_call', 'storage_deposit'],
   })) as Nep141Contract;
 }

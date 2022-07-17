@@ -41,6 +41,12 @@ export interface NftCreateParcelSeriesDto {
   royalty: Royalty;
 }
 
+export interface NftCreateVoucherSeriesDto {
+  token_metadata: TokenMetadata;
+  price: any;
+  royalty: Royalty;
+}
+
 export interface TokenSeriesJson {
   token_series_id: string;
   parcel_metadata: ParcelMetadata;
@@ -77,6 +83,8 @@ export interface FtStakeAndNftMintDto {
 
 export interface Nep141Contract extends Contract {
   ft_balance_of;
+  ft_transfer_call;
+  storage_deposit;
 }
 
 export interface RcParcelsContract extends Contract {

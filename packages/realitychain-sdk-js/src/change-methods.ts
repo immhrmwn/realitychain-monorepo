@@ -9,6 +9,7 @@ import {
   RcVouchersContract,
   TokenSeriesIdDto,
   TokenSeriesJson,
+  NftCreateVoucherSeriesDto,
 } from './interfaces';
 
 export async function nftCreateParcelSeries(
@@ -26,7 +27,7 @@ export async function nftCreateParcelSeries(
 
 export async function nftCreateVoucherSeries(
   contract: RcVouchersContract,
-  args: NftCreateParcelSeriesDto,
+  args: NftCreateVoucherSeriesDto,
   gas: number = 300000000000000,
   amount: string = '7090000000000000000000',
 ): Promise<TokenSeriesJson> {

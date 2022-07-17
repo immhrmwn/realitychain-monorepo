@@ -1,34 +1,33 @@
 import { keyStores } from 'near-api-js';
-import { rcParcelsTestnetConfig } from '../src/constant';
-import { parcelsContractWithAccountId } from '../src/near-api';
-import { NftCreateParcelSeriesDto } from '../src/interfaces';
-import { nftCreateParcelSeries } from '../src/change-methods';
+import {
+  ftStakeAndNftMint,
+  nftCreateVoucherSeries,
+  rcVouchersTestnetConfig,
+  vouchersContractWithAccountId,
+  NftCreateVoucherSeriesDto,
+  nep141ContractWithAccountId,
+  testnetNep141Config,
+} from '../src';
 
 const main = async () => {
   try {
     const ownerAccountId = 'agustinustheo.testnet';
-    const treasuryAccountId = 'rc-parcels.testnet';
+    const treasuryAccountId = 'rc-vouchers.testnet';
     const keyStore = new keyStores.UnencryptedFileSystemKeyStore(`${process.env.HOME}/.near-credentials/`);
-    const contract: any = await parcelsContractWithAccountId(ownerAccountId, keyStore, rcParcelsTestnetConfig);
+    const contract = await vouchersContractWithAccountId(ownerAccountId, keyStore, rcVouchersTestnetConfig);
+    const ftContract = await nep141ContractWithAccountId(ownerAccountId, keyStore, testnetNep141Config);
 
-    if (contract.new_default_meta) {
-      await contract.new_default_meta({
-        args: {
-          owner_id: ownerAccountId,
-          treasury_id: treasuryAccountId,
-        },
-        gas: 300000000000000,
-      });
-    }
+    // if (contract.new_default_meta) {
+    //   await contract.new_default_meta({
+    //     args: {
+    //       owner_id: ownerAccountId,
+    //       treasury_id: treasuryAccountId,
+    //     },
+    //     gas: 300000000000000,
+    //   });
+    // }
 
-    const formattedParams: NftCreateParcelSeriesDto = {
-      parcel_metadata: {
-        world_id: 'world_id',
-        land_id: 'land_id',
-        land_size: 0,
-        land_x: 0,
-        land_y: 0,
-      },
+    const formattedParams: NftCreateVoucherSeriesDto = {
       token_metadata: {
         title: 'Dark',
         media: 'bafybeifdbvb6yzajogbe4dbn3bgxoli3sp7ol7upfmu2givpvbwufydthu',
@@ -49,9 +48,38 @@ const main = async () => {
       },
     };
 
-    const ret = await nftCreateParcelSeries(contract, formattedParams);
+    // const ret = await nftCreateVoucherSeries(contract, formattedParams);
+
+    // console.log(ret);
+
+    // const ret2 = await ftStakeAndNftMint(contract, {
+    //   receiver_id: 'rc-parcels.testnet',
+    //   amount: '10000000000000',
+    //   token_series_id: '1',
+    // });
+
+    const ret = await ftContract.storage_deposit({
+      args: {
+        account_id: 'rc-vouchers.testnet',
+        registration_only: null,
+      },
+      gas: 300000000000000,
+      amount: '7090000000000000000000',
+    });
 
     console.log(ret);
+
+    const ret2 = await ftContract.ft_transfer_call({
+      args: {
+        receiver_id: 'rc-vouchers.testnet',
+        amount: '10000000000000',
+        msg: '{ "token_series_id": "1" }',
+      },
+      gas: 300000000000000,
+      amount: '1',
+    });
+
+    console.log(ret2);
   } catch (err) {
     throw err;
   }
