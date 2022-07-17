@@ -1,5 +1,6 @@
 use crate::*;
 use near_sdk::{env, ext_contract, near_bindgen, AccountId};
+use std::str::FromStr;
 
 #[ext_contract(ext_approval_receiver)]
 pub trait NonFungibleTokenReceiver {
@@ -32,8 +33,8 @@ impl RealityParcelVouchersContract {
             receiver_id,
             amount,
             None,
-            &env::current_account_id(),
-            0, // amount of yoctoNEAR to attach
+            &AccountId::from_str("unet.testnet").unwrap(),
+            1, // amount of yoctoNEAR to attach
             GAS_FOR_CALLBACK,
         );
 

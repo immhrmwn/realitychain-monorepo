@@ -4,6 +4,7 @@
   "description": "Reality Chain NFT Smart Contract",
   "scripts": {
     "build": "./build.sh",
+    "deploy:testnet": "yarn build && NEAR_ENV=testnet near deploy --accountId rc-vouchers.testnet --wasmFile out/main.wasm",
     "prepare": "yarn build",
     "lint": "cargo clippy",
     "format": "cargo fmt",
