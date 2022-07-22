@@ -7,8 +7,9 @@
     "prepare": "lerna run prepare",
     "lint": "lerna run --parallel lint --scope=@realitychain/{nft-parcels,erc20,sdk,nft-vouchers}",
     "format": "lerna run --parallel format",
+    "test": "lerna run --parallel test --scope=@realitychain/{nft-parcels,erc20,nft-vouchers}",
     "start": "yarn workspace @realitychain/webapp start",
-    "test": "lerna run --parallel test --scope=@realitychain/{nft-parcels,erc20,nft-vouchers}"
+    "bootstrap:webapp": "lerna bootstrap --scope=@realitychain/{webapp,sdk} --ignore-scripts"
   },
   "resolutions": {
     "**/ethers": "^5.6.8",
