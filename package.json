@@ -3,13 +3,17 @@
   "private": true,
   "scripts": {
     "lerna": "lerna",
-    "build": "lerna run build",
-    "prepare": "lerna run prepare",
-    "lint": "lerna run --parallel lint --scope=@realitychain/{nft-parcels,erc20,sdk,nft-vouchers}",
-    "format": "lerna run --parallel format",
-    "test": "lerna run --parallel test --scope=@realitychain/{nft-parcels,erc20,nft-vouchers}",
-    "start": "yarn workspace @realitychain/webapp start",
-    "bootstrap:webapp": "lerna bootstrap --scope=@realitychain/{webapp,sdk} --ignore-scripts"
+    "build:all": "lerna run build",
+    "build": "lerna run build --scope=@realitychain/{erc20,sdk,webapp}",
+    "prepare:all": "lerna run prepare",
+    "prepare": "lerna run prepare --scope=@realitychain/{erc20,sdk,webapp}",
+    "lint:all": "lerna run --parallel lint --scope=@realitychain/{nft-parcels,erc20,sdk,nft-vouchers}",
+    "lint": "lerna run --parallel lint --scope=@realitychain/{erc20}",
+    "format:all": "lerna run --parallel format",
+    "format": "lerna run --parallel format --scope=@realitychain/{erc20,sdk,webapp}",
+    "test": "lerna run --parallel test --scope=@realitychain/{erc20}",
+    "test:all": "lerna run --parallel test --scope=@realitychain/{nft-parcels,erc20,nft-vouchers}",
+    "start": "yarn workspace @realitychain/webapp start"
   },
   "resolutions": {
     "**/ethers": "^5.6.8",
