@@ -2,15 +2,21 @@ import React from "react";
 import { Header } from "./components/Header";
 import { ConnectWallet } from "./components/ConnectWallet";
 import { HomePage } from "./components/HomePage";
+import { FetchComponent } from "./components/FetchComponent";
 import { WorldComponent } from "./components/World";
-import { Prototype as DesignComponent } from "./components/Design/Prototype";
+import { ProjectComponent } from "./components/Project/Project";
+import { ProjectDetail} from "./components/ProjectDetail/ProjectDetail"
 import { login, logout } from "./utils";
 import ParcelComponent from "./components/Parcel/Parcel";
+import {ProfileComponent} from "./components/Profile/Profile";
 import {ThemeProvider} from '@material-ui/core/styles';
 import theme from './themes/dark-theme';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { DiscoverComponent } from "./components/Discover/Discover";
+import { Navbar } from './components/Navbar/Navbar'
+import { CreateComponent } from "./components/Create/Create";
 
 function App() {
   const [open, setOpen] = React.useState(false);
@@ -64,7 +70,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
-        <Header
+        {/* <Header
           onConnect={handleOpenModal}
           onLogout={logout}
           balance={balance}
@@ -73,10 +79,17 @@ function App() {
           open={open}
           onHide={handleCloseModal}
           onLogin={onLogin}
-        />
+        /> */}
+      <Navbar />
+
         <Routes>
-          <Route path="/design" element={<DesignComponent />} />
+          <Route path="/project/:id" element={<ProjectDetail />} />
+          <Route path="/create-metaverse" element={<CreateComponent />} />
+          <Route path="/discover" element={<DiscoverComponent />} />
+          <Route path="/fetch" element={<FetchComponent />} />
+          <Route path="/project" element={<ProjectComponent />} />
           <Route path="/minting" element={<ParcelComponent />} />
+          <Route path="/profile" element={<ProfileComponent />} />
           <Route
             path="/staking"
             element={<WorldComponent balance={balance} />}

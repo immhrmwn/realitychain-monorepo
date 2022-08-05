@@ -50,14 +50,20 @@ const textMedium = 600;
 const textBold = 700;
 
 //Font size
-const textXs = 10;
-const textSm = 12;
-const textBs = 14;
-const textMd = 16;
-const textLg = 18;
-const textXl = 22;
-const text2Xl = 28;
-const text3Xl = 34;
+const overline = 10;
+const caption = 12;
+const button2 = 13;
+const button1 = 15;
+const body2 = 13;
+const body1 = 15;
+const subtitle2 = 13;
+const subtitle1 = 15;
+const heading6 = 16;
+const heading5 = 18;
+const heading4 = 22;
+const heading3 = 24;
+const heading2 = 27;
+const heading1 = 30;
 
 
 const theme = createTheme({
@@ -99,7 +105,7 @@ const theme = createTheme({
       contrastText: '#FFFFF',
     },
     secondary: {
-      main: primaryOrange,
+      main: 'rgba(183, 97, 194, 1)',
       contrastText: '#FFFFF',
     },
     text: {
@@ -114,66 +120,58 @@ const theme = createTheme({
     fontWeightMedium: textMedium,
     fontWeightBold: textBold,
     subtitle1: {
-      fontSize: textXs,
+      fontSize: subtitle1,
     },
     subtitle2: {
-      fontSize: textSm,
+      fontSize: subtitle2,
     },
     caption: {
-      fontSize: textSm,
+      fontSize: caption,
+      fontWeight: 500,
 
-      [breakpoints.down(breakpointsValue.lg)]: {
-        fontSize: textXs,
-      },
-      [breakpoints.down(breakpointsValue.xs)]: {
-        fontSize: textBs,
-        fontWeight: textMedium,
-      },
+      [breakpoints.down(breakpointsValue.xs)]: {},
     },
     body1: {
-      fontSize: textBs,
+      fontSize: body1,
     },
     h6: {
-      fontSize: textBs,
+      fontSize: heading6,
       fontWeight: 600,
     },
     h5: {
-      fontSize: textMd,
+      fontSize: heading5,
       fontWeight: 600,
 
-      [breakpoints.down(breakpointsValue.lg)]: {
-        fontSize: textBs,
-      },
+      [breakpoints.down(breakpointsValue.lg)]: {},
     },
     h4: {
-      fontSize: textLg,
+      fontSize: heading4,
       fontWeight: 600,
 
-      [breakpoints.down(breakpointsValue.lg)]: {
-        fontSize: textMd,
-      },
+      [breakpoints.down(breakpointsValue.lg)]: {},
     },
     h3: {
-      fontSize: textXl,
+      fontSize: heading3,
+      fontWeight: 600,
+      lineHeight: '32px',
 
-      [breakpoints.down(breakpointsValue.lg)]: {
-        fontSize: textLg,
-      },
+      [breakpoints.down(breakpointsValue.lg)]: {},
     },
     h2: {
-      fontSize: text2Xl,
+      fontSize: heading2,
+      fontWeight: 600,
 
-      [breakpoints.down(breakpointsValue.lg)]: {
-        fontSize: textXl,
-      },
+      [breakpoints.down(breakpointsValue.lg)]: {},
     },
     h1: {
-      fontSize: text3Xl,
+      fontSize: heading1,
+      fontWeight: 600,
 
-      [breakpoints.down(breakpointsValue.lg)]: {
-        fontSize: text2Xl,
-      },
+      [breakpoints.down(breakpointsValue.lg)]: {},
     },
+    overline: {
+      fontSize: overline
+    }
   },
 
   overrides: {
@@ -189,7 +187,7 @@ const theme = createTheme({
     },
     MuiButton: {
       root: {
-        textTransform: 'none',
+        textTransform: 'uppercase',
         boxSizing: 'border-box',
         borderRadius: 4,
         width: 270
@@ -227,10 +225,12 @@ const theme = createTheme({
         },
       },
       outlinedPrimary: {
-        border: `2px solid ${borderPurple}`,
-        backgroundColor: '#FFF',
+        border: `2px solid rgba(30, 79, 203, 1)`,
+        backgroundColor: 'transparent',
+        color: '#FFF',
+        
         '&:hover': {
-          backgroundColor: neutral20,
+          border: `2px solid rgba(255, 104, 233, 1)`,
         },
       },
       outlinedSecondary: {
