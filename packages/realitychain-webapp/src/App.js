@@ -1,28 +1,32 @@
 import React from "react";
+
+import {ThemeProvider} from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import { Header } from "./components/Header";
 import { ConnectWallet } from "./components/ConnectWallet";
-import { HomePage } from "./components/HomePage";
+import { CreateComponent } from "./components/Create/Create";
+import { CreateNFTComponent } from "./components/CreateNFT/CreateNFT";
+import { DiscoverComponent } from "./components/Discover/Discover";
 import { FetchComponent } from "./components/FetchComponent";
-import { WorldComponent } from "./components/World";
+import { HomePage } from "./components/HomePage";
+import { ProfileComponent } from "./components/Profile/Profile";
 import { ProjectComponent } from "./components/Project/Project";
 import { ProjectDetail} from "./components/ProjectDetail/ProjectDetail"
-import { login, logout } from "./utils";
-import ParcelComponent from "./components/Parcel/Parcel";
-import {ProfileComponent} from "./components/Profile/Profile";
-import {ThemeProvider} from '@material-ui/core/styles';
-import theme from './themes/dark-theme';
-import CssBaseline from '@material-ui/core/CssBaseline';
-
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { DiscoverComponent } from "./components/Discover/Discover";
 import { Navbar } from './components/Navbar/Navbar'
-import { CreateComponent } from "./components/Create/Create";
+import { NFTDetail } from "./components/NFTDetail/NftDetail";
+import { WorldComponent } from "./components/World";
+import ParcelComponent from "./components/Parcel/Parcel";
+
+import theme from './themes/dark-theme';
+import { login, logout } from "./utils";
+import { ModalConnect } from "./components/ModalConnect";
 
 function App() {
+
   const [open, setOpen] = React.useState(false);
-
   const [, setLoading] = React.useState(false);
-
   const [balance, setBalance] = React.useState("~");
   const [, setContractOwner] = React.useState("");
   const [, setLandMetadata] = React.useState([]);
@@ -70,31 +74,22 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
-        {/* <Header
-          onConnect={handleOpenModal}
-          onLogout={logout}
-          balance={balance}
-        />
-        <ConnectWallet
-          open={open}
-          onHide={handleCloseModal}
-          onLogin={onLogin}
-        /> */}
-      <Navbar />
-
+        {/* <Header onConnect={handleOpenModal} onLogout={logout} balance={balance} /> */}
+        {/* <ConnectWallet open={open} onHide={handleCloseModal} onLogin={onLogin} /> */}
+        <Navbar onConnect={handleOpenModal} balance={balance} />
+        <ModalConnect open={open} onHide={handleCloseModal} onLogin={onLogin} />
         <Routes>
-          <Route path="/project/:id" element={<ProjectDetail />} />
-          <Route path="/create-metaverse" element={<CreateComponent />} />
           <Route path="/discover" element={<DiscoverComponent />} />
           <Route path="/fetch" element={<FetchComponent />} />
-          <Route path="/project" element={<ProjectComponent />} />
           <Route path="/minting" element={<ParcelComponent />} />
           <Route path="/profile" element={<ProfileComponent />} />
-          <Route
-            path="/staking"
-            element={<WorldComponent balance={balance} />}
-          />
-          <Route path="/" element={<HomePage />} />
+          <Route path="/project/:id" element={<ProjectDetail />} />
+          <Route path="/project" element={<ProjectComponent />} />
+          <Route path="/create-metaverse" element={<CreateComponent />} />
+          <Route path="/nft-utility/create" element={<CreateNFTComponent />} />
+          <Route path="/nft-utility/:id" element={<NFTDetail />} />
+          <Route path="/staking" element={<WorldComponent balance={balance} />} />
+          <Route path="/" element={<HomePage onConnect={handleOpenModal} />} />
         </Routes>
       </Router>
     </ThemeProvider>

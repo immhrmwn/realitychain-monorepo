@@ -10,20 +10,16 @@ import Paper from '@material-ui/core/Paper';
 
 import {TabsComponent} from '../Tabs/Tabs';
 import {useStyles} from './profile.style'
-
+import {SelectMetaverse} from './Render/Modal'
+import {NftUtility} from './Render/Nft/Nft'
 export const ProfileComponent = () => {
   const style = useStyles();
   const [activeTab, setActiveTab] = React.useState('0');
+  const [open, setOpen] = React.useState(false);
 
-  const tabs1 = () => {
-    return (
-      <Paper style={{display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', height: 480}}>
-        <Typography variant="h4" style={{marginBottom: 10}}>Create NFT utility now!</Typography>
-        <Typography variant="subtitle1" style={{marginBottom: 40}}>Create and use your NFT utilities in metaverse.</Typography>
-        <Button variant="text">LEARN MORE</Button>
-      </Paper>
-    )
-  }
+  const handleToggleModal = () => {
+    setOpen(!open);
+  };
 
   const tabs2 = () => {
     return (
@@ -37,12 +33,13 @@ export const ProfileComponent = () => {
     {
       id: '0',
       title: 'NFT UTILITY',
-      component: tabs1(),
+      component: <NftUtility nfts={['yeah']} />,
     },
     {
       id: '1',
       title: 'NFT PARCEL',
       component: tabs2(),
+      disabled: true
     },
   ];
 
@@ -63,7 +60,7 @@ export const ProfileComponent = () => {
       
       <div style={{position: 'relative'}}>
         <Button 
-          onClick={console.log} //open modal show myriad town
+          onClick={handleToggleModal} //open modal show myriad town
           className={style.button}
           variant="contained"
           color="primary"
@@ -78,6 +75,7 @@ export const ProfileComponent = () => {
           onChangeTab={handleChangeTab}
         />
       </div>
+      <SelectMetaverse open={open} onClose={handleToggleModal} />
     </Container>
   );
 };

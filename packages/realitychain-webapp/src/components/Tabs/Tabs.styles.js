@@ -10,6 +10,9 @@ export const useStyles = makeStyles(theme =>
       },
       '& .MuiTab-textColorPrimary.Mui-selected': {
         color: '#FFF'
+      },
+      '& .MuiTab-textColorPrimary.Mui-disabled': {
+        color: 'grey'
       }
     },
   }),

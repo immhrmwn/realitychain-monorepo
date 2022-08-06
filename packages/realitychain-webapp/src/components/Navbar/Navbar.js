@@ -39,7 +39,7 @@ function LinkTab(props) {
   );
 }
 
-export const Navbar = () => {
+export const Navbar = ({onConnect, balance}) => {
   const navigate = useNavigate();
   const location = useLocation();
   const style = useStyles();
@@ -57,6 +57,10 @@ export const Navbar = () => {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+  };
+
+  const handleConnectWallet = () => {
+    onConnect();
   };
 
   return (
@@ -86,14 +90,18 @@ export const Navbar = () => {
             <LinkTab label="DISCOVER" href="/discover" value={'discover'} {...a11yProps(0)} />
             <LinkTab label="MARKETPLACE" href="/marketplace" value={'marketplace'} disabled {...a11yProps(1)} />
             <LinkTab label="MY PROJECT" href="/project" value={'project'} {...a11yProps(2)} />
-            <LinkTab label="NFT UTILITY" href="/nft-utility" value={'nft-utility'} {...a11yProps(3)} />
+            <LinkTab label="NFT UTILITY" href="/nft-utility" value={'nft-utility'} disabled {...a11yProps(3)} />
           </Tabs>
         </div>
         <div style={{display: 'flex', alignItems: 'center', gap: 16}}>
-          <ButtonGroup size="small" variant="outlined" color="primary" style={{justifySelf: 'flex-end'}}>
-            <Button style={{width: 'auto', color: '#B761C2', borderRightColor: 'transparent', marginRight: -3}}>500 REAL</Button>
-            <Button style={{width: 'auto', backgroundColor: 'rgba(152, 22, 168, 0.15)', borderLeftColor: 'transparent'}}>unknown.near</Button>
-          </ButtonGroup>
+          {window.walletConnection.isSignedIn() ?
+            <ButtonGroup size="small" variant="outlined" color="primary" style={{justifySelf: 'flex-end'}}>
+              <Button style={{width: 'auto', color: '#B761C2', borderRightColor: 'transparent', marginRight: -3}}>500 REAL</Button>
+              <Button style={{width: 'auto', backgroundColor: 'rgba(152, 22, 168, 0.15)', borderLeftColor: 'transparent'}}>unknown.near</Button>
+            </ButtonGroup>
+          :
+            <Button variant="contained" color="primary" style={{width: 'auto'}} onClick={handleConnectWallet}>Connect</Button>
+          }
           <IconButton
             size="large"
             edge="start"

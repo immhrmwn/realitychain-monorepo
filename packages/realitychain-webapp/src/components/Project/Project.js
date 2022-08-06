@@ -52,6 +52,7 @@ export const ProjectComponent = () => {
       id: '1',
       title: 'CROWD STAKING',
       component: tabs2(),
+      disabled: true
     },
   ];
 

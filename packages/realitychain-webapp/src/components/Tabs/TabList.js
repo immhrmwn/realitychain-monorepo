@@ -69,6 +69,7 @@ export const TabList = props => {
               value={tab.id}
               icon={tab.icon}
               className={styles.tab}
+              disabled={tab.disabled}
             />
           );
         }
