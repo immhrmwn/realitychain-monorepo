@@ -88,6 +88,7 @@ export const WorldComponent = ({ balance }) => {
       style={{
         height: "calc(100vh - 66px)",
         padding: 50,
+        textAlign: 'center'
       }}
     >
       {!blockchain && <h1>SELECT BLOCKCHAIN FOR METAVERSE</h1>}
@@ -152,7 +153,7 @@ export const WorldComponent = ({ balance }) => {
                   }}
                 >
                   <Button
-                    variant={world === "2D" ? "warning" : "outline-dark"}
+                    variant={world === "2D" ? "warning" : "outline-light"}
                     style={{ width: 100 }}
                     onClick={() => selectWorld("2D")}
                     className={`${world === "2D" && "selected"}`}
@@ -160,7 +161,7 @@ export const WorldComponent = ({ balance }) => {
                     2D
                   </Button>
                   <Button
-                    variant={world === "3D" ? "warning" : "outline-dark"}
+                    variant={world === "3D" ? "warning" : "outline-light"}
                     style={{ width: 100 }}
                     onClick={() => selectWorld("3D")}
                   >
@@ -179,19 +180,19 @@ export const WorldComponent = ({ balance }) => {
                   }}
                 >
                   <Button
-                    variant={size === "small" ? "warning" : "outline-dark"}
+                    variant={size === "small" ? "warning" : "outline-light"}
                     onClick={() => selectSize("small")}
                   >
                     SMALL
                   </Button>
                   <Button
-                    variant={size === "medium" ? "warning" : "outline-dark"}
+                    variant={size === "medium" ? "warning" : "outline-light"}
                     onClick={() => selectSize("medium")}
                   >
                     MEDIUM
                   </Button>
                   <Button
-                    variant={size === "large" ? "warning" : "outline-dark"}
+                    variant={size === "large" ? "warning" : "outline-light"}
                     onClick={() => selectSize("large")}
                   >
                     LARGE
@@ -240,7 +241,7 @@ export const WorldComponent = ({ balance }) => {
               </div>
               <div style={{ marginBottom: 32 }} />
               <Button
-                variant={value !== price() ? "outline-dark" : "primary"}
+                variant={value !== price() ? "outline-light" : "primary"}
                 style={{ width: "100%" }}
                 onClick={handleStake}
                 disabled={

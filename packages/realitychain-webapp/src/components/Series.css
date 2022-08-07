@@ -1,5 +1,5 @@
 .col2 {
-  border: 1px solid black;
+  border: 1px solid white;
   border-radius: 8px;
   padding: 30px;
   min-height: 24rem;
@@ -11,7 +11,7 @@
 }
 
 .col1 {
-  border: 1px solid black;
+  border: 1px solid white;
   border-radius: 8px;
   min-height: 24rem;
   text-align: left;

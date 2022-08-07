@@ -8,7 +8,7 @@ import {
   InputGroup,
   Form,
 } from "react-bootstrap";
-import "./World.css";
+import "./Series.css";
 import { useNavigate } from "react-router-dom";
 import {
   nftCreateParcelSeries,
@@ -67,7 +67,7 @@ export const SeriesComponent = ({ balance }) => {
         padding: 50,
       }}
     >
-      <h1>CREATE SERIES</h1>
+      <h1 style={{textAlign: 'center'}}>CREATE SERIES</h1>
       <Container style={{ marginTop: 50 }}>
         <Row>
           <Col>
@@ -82,7 +82,7 @@ export const SeriesComponent = ({ balance }) => {
                   }}
                 >
                   <Button
-                    variant={value !== price() ? "outline-dark" : "primary"}
+                    variant={value !== price() ? "outline-light" : "primary"}
                     style={{ width: "100%" }}
                     onClick={handleCreateSeries}
                   >
